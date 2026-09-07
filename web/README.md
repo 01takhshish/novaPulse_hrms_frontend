@@ -1,7 +1,15 @@
 # Nova Pulse — web
 
-Next.js 16 (App Router) port of the legacy single-file `index.html` marketing site.
-Phase 1 of the migration: same design, real build pipeline, no backend yet.
+The Nova Pulse application: marketing site, blog, admin lead dashboard and API, in one
+Next.js 16 app. It began as a port of the legacy single-file `index.html` and has since
+grown a database, an admin area and pages of its own.
+
+Repository overview and deployment summary: [`../README.md`](../README.md).
+
+- **34 pages**, everything prerendered except `/admin` and `/api`.
+- **Builds with no environment variables** — the database is only needed for the demo
+  form and the admin area.
+- **42 tests** (Vitest, against a real Postgres), typecheck and lint enforced in CI.
 
 ## Run it
 
