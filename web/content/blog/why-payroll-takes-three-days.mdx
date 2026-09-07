@@ -1,0 +1,53 @@
+---
+title: "Why month-end payroll takes three days"
+description: "It is almost never the payroll software. It is the four manual handoffs between the attendance device and the payslip — and each one is removable."
+date: 2026-07-08
+author: "Nova Pulse"
+tags: ["HRMS", "Payroll"]
+---
+
+Ask a finance team why payroll takes three days and they will usually blame the payroll software. In every deployment we have audited, the software was not the bottleneck. The handoffs were.
+
+Here is the path attendance data typically takes in a mid-sized Indian business, and what each step costs.
+
+## The four handoffs
+
+**One: device to spreadsheet.** Someone extracts punch logs from each machine. In a multi-branch business this happens several times, on different days, by different people. Nothing can start until the slowest branch reports.
+
+**Two: spreadsheet to spreadsheet.** Raw punches become work days. Late marks, grace periods, half-days and overtime get applied by formula — and those formulas live in a file that one person understands and nobody has reviewed in two years.
+
+**Three: exceptions by email.** Missed punches, device failures and approved leave arrive as replies in an inbox and get patched in by hand. This is the step that consumes the most time and produces the most errors, because it has no audit trail at all.
+
+**Four: spreadsheet to payroll.** The final sheet is imported or re-keyed. Statutory deductions apply. Payslips generate.
+
+Only that last step is payroll software. The other three days are data logistics.
+
+## What each handoff actually costs
+
+The visible cost is time. The expensive costs are the other two.
+
+**Errors that reach a payslip.** An underpayment gets reported immediately and damages trust. An overpayment usually does not get reported at all, and quietly recurs every month until someone notices. Both come from the same place: a manual transcription with no validation.
+
+**No defensible record.** When an employee disputes attendance six months later, you need to show what was recorded and what changed. If exceptions were patched into a spreadsheet from an email thread, you cannot. That is a problem for a labour dispute, and it is a problem for a data access request under the DPDP Act.
+
+## Removing them
+
+Each handoff is removable, and they are worth removing in this order:
+
+1. **Push instead of pull.** Devices send punches to a central system as they happen. This alone deletes handoff one and turns a multi-day collection exercise into something that has already happened by the 1st.
+
+2. **Encode the rules once.** Shift patterns, grace periods, overtime multipliers and half-day thresholds get configured in the system rather than living in formulas. This deletes handoff two, and — more importantly — makes the rules visible and reviewable instead of tribal knowledge.
+
+3. **Move exceptions into the system.** Missed-punch regularisation and leave approval become a request with an approver and a timestamp, not an email. This deletes handoff three and creates the audit trail you were missing.
+
+4. **Let payroll read attendance directly.** With the first three done, this is a database read, not an import. Handoff four disappears.
+
+What is left is a payroll run: review the exceptions that need a human, then generate. Hours, not days.
+
+## The part nobody budgets for
+
+Step two is where implementations stall. Encoding shift rules sounds like configuration and is actually discovery — most businesses find that their rules are not written down anywhere, that two branches have been applying different grace periods for years, and that nobody can say who authorised it.
+
+Budget real time for this. It is unglamorous, it is the step that delivers most of the value, and it is the reason we insist on doing payroll mapping as part of a deployment rather than handing over a configured device and wishing you luck.
+
+If month-end is currently a three-day event, the fastest diagnostic is to write down your four handoffs and put a name against each. The answer is usually obvious once it is on paper.

@@ -1,0 +1,57 @@
+---
+title: "Fingerprint, face, or RFID: how to choose attendance hardware for your site"
+description: "The right attendance device depends on throughput, environment and who is walking through the door — not on which datasheet looks best. A practical comparison for Indian workplaces."
+date: 2026-07-29
+author: "Nova Pulse"
+tags: ["Biometrics", "Hardware"]
+---
+
+Almost every attendance hardware decision we are asked to review was made by comparing specification sheets. That is the wrong axis. Three questions decide it, and none of them appear on a datasheet.
+
+## Question one: how many people, in how many minutes?
+
+This is the constraint people discover after installation.
+
+A fingerprint scanner takes roughly one to two seconds per verified punch, plus the time for someone to position their finger. For a 40-person office with staggered arrivals, that is invisible. For a factory where 300 people change shift at 6am, it is a twelve-minute queue at a single door.
+
+Throughput drives the decision more than accuracy does:
+
+- **Under ~50 people per entry point** — fingerprint is fine and cheapest.
+- **50–200** — face recognition, which verifies as someone walks up rather than after they stop.
+- **200+ in a tight window** — RFID cards, or multiple parallel readers. Cards are the fastest thing that exists because there is no matching step.
+
+The uncomfortable trade-off: cards are also the easiest to hand to a colleague. If throughput forces you to cards, you have traded some buddy-punching risk for queue time, and you should know you have made that trade.
+
+## Question two: what is the environment actually like?
+
+Datasheets are written for offices.
+
+**Fingerprint** readers struggle with wet, dusty, cut, or heavily calloused fingers. On construction sites, in food processing, and in workshops, the failure-to-read rate is materially worse than the lab figure. Every failed read is a manual override, and manual overrides are where attendance fraud actually lives.
+
+**Face recognition** handles dirty hands perfectly and is contactless, which matters in food and healthcare settings. It is more sensitive to lighting — strong backlight from a doorway behind the employee is the usual culprit — and needs mounting at a sensible height for the shortest and tallest people who will use it.
+
+**RFID** does not care about any of this. It cares about whether people remember their card.
+
+## Question three: what happens after the punch?
+
+This is the question that determines whether the project succeeds, and it has nothing to do with the hardware.
+
+A device that stores punches locally and requires someone to walk around with a pen drive every month is not an attendance system. It is a clock that produces homework. The cost is not the walk — it is that payroll cannot start until the walk is finished, and any error in the transfer surfaces on a payslip.
+
+What to insist on:
+
+- **Push, not pull.** The device should send punches to your server as they happen over LAN, Wi-Fi or 4G.
+- **Offline buffering.** When connectivity drops, punches must be stored on the device and pushed when it returns. Ask specifically; not all models do this well.
+- **A documented integration to your payroll.** "Exports to Excel" is not an integration. Shift rules, grace periods and overtime have to be mapped once, properly, or you will be reconciling by hand forever.
+
+## A reasonable default
+
+For a typical multi-branch Indian business — an office, a warehouse, some field staff — the deployment that causes the fewest problems is:
+
+- **Face recognition** at the main office entrance, where volume is moderate and appearance is consistent.
+- **RFID** at the warehouse or factory gate, where a shift changes at once.
+- **Cloud push** from every device to one central system, so head office can answer questions about any site without phoning anyone.
+
+Then spend the effort you saved on mapping shift rules into payroll correctly. That is where the month-end days actually go.
+
+If you want a second opinion on a quote you have already been given, we will look at it — including when the answer is that your existing hardware is fine and only the integration needs fixing.

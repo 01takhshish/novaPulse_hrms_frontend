@@ -1,0 +1,63 @@
+---
+title: "Biometric attendance under India's DPDP Act: what employers actually have to do"
+description: "Fingerprint and face data is personal data. Here is what the Digital Personal Data Protection Act means in practice for an employer running attendance devices — and the one exemption most people miss."
+date: 2026-08-18
+author: "Nova Pulse"
+tags: ["Compliance", "Biometrics", "HRMS"]
+featured: true
+---
+
+Most compliance conversations about biometric attendance start in the wrong place — with the device. The device is not the problem. What you do with the template it produces is.
+
+Here is the practical version, for an employer who already runs attendance hardware or is about to.
+
+## Biometric data is personal data
+
+Under the Digital Personal Data Protection Act, 2023, a fingerprint template or face signature tied to an identifiable employee is personal data. You are the **Data Fiduciary**; your employee is the **Data Principal**.
+
+One thing worth understanding, because it trips people up who have read about GDPR: the DPDP Act does **not** create a separate "sensitive personal data" tier the way the older SPDI Rules or GDPR do. Biometric data is not subject to a distinct, heavier regime under the Act itself. It is personal data, and the Act's obligations apply to it like any other.
+
+That is not permission to be careless. It means your obligations are the general ones, and you have to actually meet them.
+
+## The exemption most employers miss
+
+The common assumption is that you need explicit consent from every employee before you can run biometric attendance. That is not quite the position the Act takes.
+
+Section 7 sets out "certain legitimate uses" where personal data may be processed without separate consent. Among them is processing **for purposes of employment**, and processing to safeguard the employer from loss or liability. Attendance, payroll and access control sit squarely inside that.
+
+This matters commercially, because designing a consent-capture flow for 400 factory workers is expensive and fragile. In most cases you do not need one for attendance itself.
+
+What the exemption does *not* do is switch off everything else. You still owe:
+
+- **Purpose limitation.** Attendance data collected for payroll cannot quietly become an input into performance monitoring or something you sell on.
+- **Reasonable security safeguards.** This is the obligation with the largest penalty attached — up to ₹250 crore for a failure to take them.
+- **Breach notification**, to the Data Protection Board and to affected employees.
+- **Data principal rights** — access, correction, erasure — and a named grievance route to exercise them.
+
+<Callout>
+The employment exemption covers the processing. It does not cover storing templates on an unpatched box in a cupboard, and it does not remove your duty to tell employees what you hold.
+</Callout>
+
+## What "reasonable security safeguards" looks like in practice
+
+Nobody has published a checklist that makes you automatically compliant. But for an attendance deployment, the questions an auditor will ask are predictable:
+
+1. **Where do the templates live?** On the device, on a local server, or in a vendor's cloud? Each answer has a different risk profile and a different contract behind it.
+2. **Is the template reversible?** Reputable devices store a mathematical template, not a fingerprint image. Confirm which you have bought — it is a genuine difference.
+3. **Who can export the data?** Most breaches in this category are an admin with a USB port, not an attacker.
+4. **What happens on exit?** When someone leaves, their biometric template should go with their door access. If your HRMS and your access control are separate systems, this is usually where it fails.
+5. **How long do you keep it?** Attendance logs have a legitimate retention period tied to payroll and statutory records. Biometric templates for people who left three years ago do not.
+
+## Where multi-branch deployments go wrong
+
+Single-site deployments are usually fine. The failure mode we see is a company with four branches, each with its own device, each pushing to its own local machine, with attendance consolidated by someone emailing spreadsheets to head office once a month.
+
+That arrangement fails on almost every count above. There is no single place where you can answer "what do we hold about this person," which makes a data principal access request nearly impossible to satisfy honestly. And it means personal data is sitting in email attachments indefinitely.
+
+Consolidating to one cloud-synced system is usually sold as a payroll efficiency. It is also the single largest compliance improvement available to most mid-sized employers.
+
+## A short, honest disclaimer
+
+Implementation of the Act has been phased, with obligations commencing through subsequently notified Rules. Where you sit in that timeline, and what your specific processing requires, is a question for your own counsel — not for a vendor blog post. Treat this as an engineering checklist, not a legal opinion.
+
+What is not in doubt is the direction of travel. Employers who can already answer the five questions above will find the transition uneventful. Employers still emailing attendance spreadsheets will not.
