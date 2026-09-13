@@ -126,7 +126,7 @@ export default async function ServicePage({
               <Reveal delay={320}>
                 <div className="mt-9 flex flex-col gap-4 sm:flex-row">
                   <DemoButton
-                    service={service.demoService}
+                    service={service.name}
                     source={`service-${service.slug}-hero`}
                     className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-800 px-8 py-4 text-base font-bold text-white shadow-lg shadow-brand-900/20 transition-all hover:scale-102 hover:bg-brand-900 sm:w-auto"
                   >
@@ -401,7 +401,7 @@ export default async function ServicePage({
                 </p>
                 <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
                   <DemoButton
-                    service={service.demoService}
+                    service={service.name}
                     source={`service-${service.slug}-cta`}
                     className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 text-base font-bold text-brand-900 shadow-lg transition-all hover:scale-102 sm:w-auto"
                   >

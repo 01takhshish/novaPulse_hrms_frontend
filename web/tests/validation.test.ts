@@ -41,9 +41,9 @@ describe("leadSubmissionSchema", () => {
     },
   );
 
-  it("rejects a service outside the published list", () => {
-    const result = leadSubmissionSchema.safeParse({ ...valid, service: "Free Money" });
-    expect(result.success).toBe(false);
+  it("accepts a new CMS service and rejects an empty selection", () => {
+    expect(leadSubmissionSchema.safeParse({ ...valid, service: "Visitor Management" }).success).toBe(true);
+    expect(leadSubmissionSchema.safeParse({ ...valid, service: "" }).success).toBe(false);
   });
 
   it("treats an empty message as absent", () => {

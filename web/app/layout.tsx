@@ -1,6 +1,5 @@
 import { serializeJsonLd } from "@/lib/json-ld";
 import type { Metadata, Viewport } from "next";
-import { DemoModalProvider } from "@/components/demo-modal";
 import { RevealObserver } from "@/components/motion/reveal-observer";
 import { isProduction, site } from "@/lib/site";
 import "./globals.css";
@@ -96,7 +95,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <RevealObserver />
-        <DemoModalProvider>{children}</DemoModalProvider>
+        {children}
       </body>
     </html>
   );

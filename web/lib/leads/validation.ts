@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { services } from "@/lib/site";
 
 /**
  * Shared by the public form and the API route, so the browser and the server
@@ -16,7 +15,7 @@ export const leadSubmissionSchema = z.object({
     .regex(phonePattern, "Enter a valid phone number")
     .max(32),
   company: z.string().trim().min(2, "Please enter your company name").max(160),
-  service: z.enum(services),
+  service: z.string().trim().min(2, "Choose a service").max(120),
   // `.or(z.literal(""))` would be unreachable here — the optional string branch
   // already accepts "". Normalise after parsing instead, so blank messages
   // land in the database as NULL rather than an empty string.

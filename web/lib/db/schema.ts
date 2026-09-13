@@ -54,7 +54,7 @@ export const leads = pgTable(
     email: varchar("email", { length: 255 }).notNull(),
     phone: varchar("phone", { length: 32 }).notNull(),
     company: varchar("company", { length: 160 }).notNull(),
-    service: leadServiceEnum("service").notNull(),
+    service: varchar("service", { length: 120 }).notNull(),
     message: text("message"),
 
     // pipeline state, owned by the sales team

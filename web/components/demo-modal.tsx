@@ -15,9 +15,7 @@ import {
   leadInputClass,
   useLeadSubmit,
 } from "@/lib/use-lead-submit";
-import { services, serviceLabels, type Service } from "@/lib/site";
-
-type OpenModal = (service?: Service, source?: string) => void;
+type OpenModal = (service?: string, source?: string) => void;
 
 /**
  * Replaces the legacy global `openDemoModal(service)`. Sections stay server
@@ -31,10 +29,16 @@ export function useDemoModal() {
   return open;
 }
 
-export function DemoModalProvider({ children }: { children: ReactNode }) {
+export function DemoModalProvider({
+  children,
+  serviceOptions,
+}: {
+  children: ReactNode;
+  serviceOptions: readonly string[];
+}) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [service, setService] = useState<Service>("General Inquiry");
+  const [service, setService] = useState("General Inquiry");
   const [source, setSource] = useState("unknown");
 
   const open = useCallback<OpenModal>((next = "General Inquiry", from = "unknown") => {
@@ -89,7 +93,7 @@ export function DemoModalProvider({ children }: { children: ReactNode }) {
     <DemoModalContext.Provider value={open}>
       {children}
       {isOpen && (
-        <DemoModal ref={dialogRef} service={service} source={source} onClose={close} />
+        <DemoModal ref={dialogRef} service={service} serviceOptions={serviceOptions} source={source} onClose={close} />
       )}
     </DemoModalContext.Provider>
   );
@@ -101,7 +105,7 @@ export function DemoButton({
   className,
   children,
 }: {
-  service?: Service;
+  service?: string;
   /** Which CTA this was, so the admin can see what actually converts. */
   source?: string;
   className?: string;
@@ -117,11 +121,13 @@ export function DemoButton({
 
 function DemoModal({
   service,
+  serviceOptions,
   source,
   onClose,
   ref,
 }: {
-  service: Service;
+  service: string;
+  serviceOptions: readonly string[];
   source: string;
   onClose: () => void;
   ref?: React.Ref<HTMLDivElement>;
@@ -204,9 +210,9 @@ function DemoModal({
 
               <Field id="service" label="Primary Requirement" errors={fieldErrors.service}>
                 <select id="service" name="service" required defaultValue={service} className={leadInputClass}>
-                  {services.map((value) => (
+                  {serviceOptions.map((value) => (
                     <option key={value} value={value}>
-                      {serviceLabels[value]}
+                      {value}
                     </option>
                   ))}
                 </select>

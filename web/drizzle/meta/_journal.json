@@ -29,6 +29,13 @@
       "when": 1789192170956,
       "tag": "0003_production_hardening",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1789272000000,
+      "tag": "0004_dynamic_lead_services",
+      "breakpoints": true
     }
   ]
 }
