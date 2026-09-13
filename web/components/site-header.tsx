@@ -5,14 +5,26 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaBars, FaChevronDown, FaPhone, FaXmark } from "react-icons/fa6";
 import { Icon } from "@/components/icon";
-import { industriesMenu, mobileNav, site, solutionsMenu } from "@/lib/site";
+import { industriesMenu, mobileNavPrimary, mobileNavSecondary, site } from "@/lib/site";
 import { useDemoModal } from "./demo-modal";
 
 type MenuItem = { readonly href: string; readonly icon: string; readonly title: string; readonly blurb: string };
 
-export function SiteHeader() {
+/**
+ * `menu` arrives as a prop rather than being imported, because service pages
+ * now live in the database and this is a client component — importing the read
+ * layer here would pull `server-only` into the browser bundle. It is fetched
+ * once in app/(site)/layout.tsx and passed down.
+ */
+export function SiteHeader({ menu }: { menu: readonly MenuItem[] }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const openDemo = useDemoModal();
+
+  const mobileLinks = [
+    ...mobileNavPrimary,
+    ...menu.map((item) => ({ href: item.href, label: item.title })),
+    ...mobileNavSecondary,
+  ];
 
   return (
     <header className="fixed top-0 w-full z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
@@ -24,7 +36,7 @@ export function SiteHeader() {
 
         {/* Desktop navigation */}
         <nav className="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600">
-          <Dropdown label="Solutions" items={solutionsMenu} allHref="/services" allLabel="View all services" />
+          <Dropdown label="Solutions" items={menu} allHref="/services" allLabel="View all services" />
           <Dropdown label="Industries" items={industriesMenu} allHref="/industries" allLabel="View all industries" />
           <Link href="/blog" className="py-2 hover:text-brand-800 transition-colors">Blog</Link>
           <Link href="/about" className="py-2 hover:text-brand-800 transition-colors">About</Link>
@@ -57,7 +69,7 @@ export function SiteHeader() {
       {mobileOpen && (
         <div id="mobileNav"
           className="lg:hidden max-h-[calc(100vh-5rem)] overflow-y-auto bg-white border-b border-slate-200 px-6 py-5 space-y-1">
-          {mobileNav.map((item) => (
+          {mobileLinks.map((item) => (
             <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)}
               className="block py-2.5 font-semibold text-slate-700 hover:text-brand-800">
               {item.label}

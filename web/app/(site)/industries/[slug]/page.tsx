@@ -8,7 +8,7 @@ import { Illustration } from "@/components/illustrations";
 import { Reveal, RevealGroup } from "@/components/motion/reveal";
 import { PageHero } from "@/components/page-hero";
 import { getIndustry, industries } from "@/content/industries";
-import { getService } from "@/content/services";
+import { getServiceForReference } from "@/lib/services";
 import { site } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -42,9 +42,9 @@ export default async function IndustryPage({
   const industry = getIndustry((await params).slug);
   if (!industry) notFound();
 
-  const related = industry.services
-    .map(getService)
-    .filter((s): s is NonNullable<typeof s> => Boolean(s));
+  const related = (await Promise.all(industry.services.map(getServiceForReference))).filter(
+    (s): s is NonNullable<typeof s> => Boolean(s),
+  );
 
   return (
     <>

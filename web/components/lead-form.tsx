@@ -14,12 +14,16 @@ export function LeadForm({
   defaultService = "General Inquiry",
   submitLabel = "Send enquiry",
   messageLabel = "How can we help?",
+  companyLabel = "Company name",
+  serviceLabel = "What do you need?",
   messagePlaceholder = "Tell us about your team size, locations, or current requirements...",
 }: {
   source: string;
   defaultService?: Service;
   submitLabel?: string;
   messageLabel?: string;
+  companyLabel?: string;
+  serviceLabel?: string;
   messagePlaceholder?: string;
 }) {
   const { status, submit, fieldErrors } = useLeadSubmit(source);
@@ -56,7 +60,7 @@ export function LeadForm({
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Field id={`${source}-company`} label="Company name" errors={fieldErrors.company}>
+        <Field id={`${source}-company`} label={companyLabel} errors={fieldErrors.company}>
           <input id={`${source}-company`} name="company" type="text" required autoComplete="organization"
             placeholder="e.g., Enterprise Ltd"
             className={`${leadInputClass} ${fieldErrors.company ? leadErrorInputClass : ""}`} />
@@ -68,7 +72,7 @@ export function LeadForm({
         </Field>
       </div>
 
-      <Field id={`${source}-service`} label="What do you need?" errors={fieldErrors.service}>
+      <Field id={`${source}-service`} label={serviceLabel} errors={fieldErrors.service}>
         <select id={`${source}-service`} name="service" required defaultValue={defaultService}
           className={leadInputClass}>
           {services.map((value) => (

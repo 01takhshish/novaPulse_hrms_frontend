@@ -1,3 +1,5 @@
+import { leadFilterSchema } from "@/lib/leads/validation";
+import { reportError } from "@/lib/errors";
 import { requireUser } from "@/lib/auth/guard";
 import { toCsv } from "@/lib/csv";
 import { allLeadsForExport } from "@/lib/leads/service";
@@ -9,9 +11,12 @@ const HEADERS = [
   "status", "message", "source", "utm_source", "utm_medium", "utm_campaign",
 ] as const;
 
-export async function GET() {
+export async function GET(request: Request) {
   await requireUser();
-  const leads = await allLeadsForExport();
+  const parsed = leadFilterSchema.safeParse(Object.fromEntries(new URL(request.url).searchParams));
+  if (!parsed.success) return Response.json({ error: "Invalid export filters." }, { status: 400 });
+  try {
+  const leads = await allLeadsForExport(5000, parsed.data);
 
   const csv = toCsv(
     HEADERS,
@@ -28,4 +33,8 @@ export async function GET() {
       "Cache-Control": "no-store",
     },
   });
+  } catch (error) {
+    reportError("export", error);
+    return Response.json({ error: "Export is temporarily unavailable." }, { status: 503 });
+  }
 }

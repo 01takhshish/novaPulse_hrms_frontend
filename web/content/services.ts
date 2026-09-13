@@ -26,6 +26,8 @@ export type ServiceContent = {
   tagline: string;
   /** Meta description. */
   description: string;
+  /** The line under the title in the header dropdown — shorter than the eyebrow. */
+  menuBlurb: string;
   icon: string;
   /** Name from components/illustrations. Used in the hero when there is no photo. */
   illustration: string;
@@ -49,6 +51,7 @@ export const services: ServiceContent[] = [
     tagline: "One workforce. One connected system.",
     description:
       "Connect attendance, HRMS and payroll into one error-free workflow. Biometric logs sync in real time, statutory deductions are automatic, and payslips are one click away.",
+    menuBlurb: "Attendance, Shifts & Payroll",
     icon: "FaIdCardClip",
     illustration: "PayrollFlow",
     image: {
@@ -137,6 +140,7 @@ export const services: ServiceContent[] = [
     tagline: "Accurate attendance, captured at the door.",
     description:
       "Fingerprint, facial recognition and RFID attendance hardware, procured, installed and mapped into your payroll — with cloud sync instead of manual data extraction.",
+    menuBlurb: "Fingerprint, Face & RFID Hardware",
     icon: "FaFingerprint",
     illustration: "AttendanceFlow",
     problems: [
@@ -215,6 +219,7 @@ export const services: ServiceContent[] = [
     tagline: "Secure the building, not just the spreadsheet.",
     description:
       "CCTV surveillance, access control and visitor management — integrated with the same employee identity your attendance system already uses.",
+    menuBlurb: "CCTV & Access Control",
     icon: "FaShieldHalved",
     illustration: "SecurityScene",
     problems: [
@@ -293,6 +298,7 @@ export const services: ServiceContent[] = [
     tagline: "Build teams that move the business forward.",
     description:
       "Executive search, B2B sales hiring and candidate background verification — a structured six-stage pipeline from requirement to onboarding.",
+    menuBlurb: "Sales, Operations & Leadership",
     icon: "FaUserPlus",
     illustration: "HiringScene",
     image: {
@@ -376,6 +382,7 @@ export const services: ServiceContent[] = [
     tagline: "Turn prospects into booked meetings.",
     description:
       "Multi-channel outbound — LinkedIn prospecting, cold email, SDR calling and WhatsApp broadcasts — delivering qualified meetings onto your sales calendar.",
+    menuBlurb: "Outbound & Sales Pipelines",
     icon: "FaChartLine",
     illustration: "GrowthFunnel",
     image: {

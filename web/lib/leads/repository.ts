@@ -1,7 +1,8 @@
+import { isUuid } from "@/lib/ids";
 import "server-only";
-import { and, count, desc, eq, gte, ilike, or } from "drizzle-orm";
+import { and, count, desc, eq, gte, ilike, or, sql } from "drizzle-orm";
 import { db } from "@/lib/db/client";
-import { leadNotes, leads, type NewLeadRow } from "@/lib/db/schema";
+import { leadNotes, leads, notificationJobs, type NewLeadRow } from "@/lib/db/schema";
 import type { Lead, LeadListPage, LeadStatusCounts, LeadWithNotes } from "./types";
 import type { LeadFilter, LeadStatus } from "./validation";
 
@@ -13,8 +14,11 @@ import type { LeadFilter, LeadStatus } from "./validation";
 export const PAGE_SIZE = 25;
 
 export async function insertLead(row: NewLeadRow): Promise<Lead> {
-  const [created] = await db().insert(leads).values(row).returning();
-  return created;
+  return db().transaction(async (tx) => {
+    const [created] = await tx.insert(leads).values(row).returning();
+    await tx.insert(notificationJobs).values({ leadId: created.id });
+    return created;
+  });
 }
 
 export async function listLeads(filter: LeadFilter): Promise<LeadListPage> {
@@ -75,6 +79,7 @@ export async function countByStatus(): Promise<LeadStatusCounts> {
 }
 
 export async function findLeadById(id: string): Promise<LeadWithNotes | null> {
+  if (!isUuid(id)) return null;
   const lead = await db().query.leads.findFirst({
     where: eq(leads.id, id),
     with: { notes: { orderBy: (n, { desc: d }) => [d(n.createdAt)] } },
@@ -85,7 +90,7 @@ export async function findLeadById(id: string): Promise<LeadWithNotes | null> {
 export async function updateLeadStatus(id: string, status: LeadStatus): Promise<Lead | null> {
   const [updated] = await db()
     .update(leads)
-    .set({ status, updatedAt: new Date() })
+    .set({ status, updatedAt: new Date(), ...(status === "won" ? { becameCustomerAt: sql`coalesce(${leads.becameCustomerAt}, now())` } : {}) })
     .where(eq(leads.id, id))
     .returning();
   return updated ?? null;
@@ -97,17 +102,22 @@ export async function addNote(input: {
   authorName: string;
   body: string;
 }) {
-  const [note] = await db().insert(leadNotes).values(input).returning();
-  await db()
-    .update(leads)
-    .set({ updatedAt: new Date() })
-    .where(eq(leads.id, input.leadId));
-  return note;
+  return db().transaction(async (tx) => {
+    const [lead] = await tx.update(leads).set({ updatedAt: new Date() })
+      .where(eq(leads.id, input.leadId)).returning({ id: leads.id });
+    if (!lead) return null;
+    const [note] = await tx.insert(leadNotes).values(input).returning();
+    return note;
+  });
 }
 
 /** Feeds the CSV export; deliberately unpaginated but ordered and bounded. */
-export async function allLeadsForExport(limit = 5000): Promise<Lead[]> {
-  return db().select().from(leads).orderBy(desc(leads.createdAt)).limit(limit);
+export async function allLeadsForExport(limit = 5000, filter: Pick<LeadFilter, "status" | "query"> = {}): Promise<Lead[]> {
+  const term = `%${filter.query ?? ""}%`;
+  return db().select().from(leads).where(and(
+    filter.status ? eq(leads.status, filter.status) : undefined,
+    filter.query ? or(ilike(leads.name, term), ilike(leads.email, term), ilike(leads.company, term), ilike(leads.phone, term)) : undefined,
+  )).orderBy(desc(leads.createdAt)).limit(limit);
 }
 
 export async function leadsCreatedSince(since: Date): Promise<number> {

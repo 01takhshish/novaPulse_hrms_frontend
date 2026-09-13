@@ -1,5 +1,4 @@
 import "server-only";
-import { sendLeadNotification } from "@/lib/email/lead-notification";
 import { err, ok, type Result } from "@/lib/result";
 import { checkRateLimit, hashIdentifier } from "@/lib/rate-limit";
 import * as repo from "./repository";
@@ -67,11 +66,7 @@ export async function createLead(
     utmContent: submission.utmContent ?? null,
     referrer: submission.referrer ?? null,
     ipHash,
-    userAgent: context.userAgent,
-  });
-
-  void sendLeadNotification(lead).catch((error) => {
-    console.error("[leads] notification failed", { leadId: lead.id, error });
+    userAgent: context.userAgent?.slice(0, 512) ?? null,
   });
 
   return ok(lead);

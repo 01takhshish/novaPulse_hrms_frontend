@@ -60,5 +60,6 @@ export async function sendLeadNotification(lead: Lead) {
     html,
     text,
     replyTo: lead.email,
+    idempotencyKey: `lead-${lead.id}`,
   });
 }

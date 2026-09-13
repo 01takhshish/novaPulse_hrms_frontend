@@ -128,6 +128,8 @@ export default function CareersPage() {
                 <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-xl md:p-10">
                   <LeadForm
                     source="careers-page"
+                    companyLabel="Current company or college"
+                    serviceLabel="Area of interest"
                     submitLabel="Send application"
                     messageLabel="About you"
                     messagePlaceholder="What you do now, what you'd like to work on, and anything we should look at."

@@ -42,3 +42,5 @@ ${items}
     },
   });
 }
+
+export const revalidate = 300;

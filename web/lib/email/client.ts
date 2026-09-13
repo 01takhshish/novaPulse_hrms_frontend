@@ -1,5 +1,6 @@
 import "server-only";
 import { Resend } from "resend";
+import { reportError } from "@/lib/errors";
 import { emailConfigured, env } from "@/lib/env";
 
 let client: Resend | null = null;
@@ -18,23 +19,28 @@ export async function sendEmail(message: {
   html: string;
   text: string;
   replyTo?: string;
+  idempotencyKey?: string;
 }): Promise<{ sent: boolean; reason?: string }> {
   if (!emailConfigured()) {
     return { sent: false, reason: "email_not_configured" };
   }
   try {
     const e = env();
-    await resend().emails.send({
+    const result = await resend().emails.send({
       from: e.LEAD_NOTIFICATION_FROM!,
       to: e.LEAD_NOTIFICATION_TO!,
       subject: message.subject,
       html: message.html,
       text: message.text,
       replyTo: message.replyTo,
-    });
+    }, { idempotencyKey: message.idempotencyKey });
+    if (result.error) {
+      reportError("email", result.error);
+      return { sent: false, reason: "provider_rejected" };
+    }
     return { sent: true };
   } catch (error) {
-    console.error("[email] send failed", error);
+    reportError("email", error);
     return { sent: false, reason: "send_failed" };
   }
 }

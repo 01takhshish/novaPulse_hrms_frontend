@@ -61,39 +61,6 @@ export const serviceLabels: Record<Service, string> = {
   "General Inquiry": "General Inquiry / Other",
 };
 
-/** Mirrors content/services.ts; kept here so the header stays a pure data render. */
-export const solutionsMenu = [
-  {
-    href: "/services/hrms-payroll",
-    icon: "FaIdCardClip",
-    title: "HRMS & Payroll",
-    blurb: "Attendance, Shifts & Payroll",
-  },
-  {
-    href: "/services/biometric-attendance",
-    icon: "FaFingerprint",
-    title: "Biometric Attendance",
-    blurb: "Fingerprint, Face & RFID Hardware",
-  },
-  {
-    href: "/services/workplace-security",
-    icon: "FaShieldHalved",
-    title: "Workplace Security",
-    blurb: "CCTV & Access Control",
-  },
-  {
-    href: "/services/corporate-hiring",
-    icon: "FaUserPlus",
-    title: "Corporate Hiring",
-    blurb: "Sales, Operations & Leadership",
-  },
-  {
-    href: "/services/b2b-lead-generation",
-    icon: "FaChartLine",
-    title: "B2B Lead Generation",
-    blurb: "Outbound & Sales Pipelines",
-  },
-] as const;
 
 export const industriesMenu = [
   { href: "/industries/manufacturing", icon: "FaNetworkWired", title: "Manufacturing & Factories", blurb: "High-throughput shift changes" },
@@ -103,14 +70,17 @@ export const industriesMenu = [
   { href: "/industries/education", icon: "FaUsers", title: "Schools & Institutes", blurb: "Campus access & visitors" },
 ] as const;
 
-export const mobileNav = [
+/**
+ * The mobile menu, minus the service links — those are inserted between the two
+ * halves by the header, from the same database-backed menu the desktop dropdown
+ * uses, so adding a service in /admin updates both at once.
+ */
+export const mobileNavPrimary = [
   { href: "/", label: "Home" },
   { href: "/services", label: "All services" },
-  { href: "/services/hrms-payroll", label: "HRMS & Payroll" },
-  { href: "/services/biometric-attendance", label: "Biometric Attendance" },
-  { href: "/services/workplace-security", label: "Workplace Security" },
-  { href: "/services/corporate-hiring", label: "Corporate Hiring" },
-  { href: "/services/b2b-lead-generation", label: "B2B Lead Generation" },
+] as const;
+
+export const mobileNavSecondary = [
   { href: "/industries", label: "Industries" },
   { href: "/blog", label: "Blog" },
   { href: "/clients", label: "Clients & Partners" },

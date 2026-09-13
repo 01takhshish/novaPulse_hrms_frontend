@@ -8,7 +8,7 @@ import { Counter } from "@/components/motion/counter";
 import { Reveal, RevealGroup } from "@/components/motion/reveal";
 import { PageHero } from "@/components/page-hero";
 import { credentials, leadership, locations, values } from "@/content/company";
-import { services } from "@/content/services";
+import { getServices } from "@/lib/services";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -18,7 +18,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const services = await getServices();
+
   return (
     <>
       <PageHero

@@ -1,16 +1,10 @@
+import { getServices } from "@/lib/services";
 import Link from "next/link";
 import Image from "next/image";
 import { FaBuilding, FaEnvelope, FaInstagram, FaLinkedinIn, FaLocationDot, FaPhone, FaWhatsapp, FaYoutube } from "react-icons/fa6";
 import { site } from "@/lib/site";
 
-const solutionLinks = [
-  { href: "/services/hrms-payroll", label: "HRMS & Payroll" },
-  { href: "/services/biometric-attendance", label: "Biometric Attendance" },
-  { href: "/services/workplace-security", label: "CCTV & Security" },
-  { href: "/services/corporate-hiring", label: "Corporate Hiring" },
-  { href: "/services/b2b-lead-generation", label: "B2B Lead Generation" },
-  { href: "/services", label: "All services" },
-];
+
 
 const industryLinks = [
   { href: "/industries/manufacturing", label: "Manufacturing" },
@@ -37,7 +31,8 @@ const socials = [
   { href: site.socials.youtube, label: "YouTube", Icon: FaYoutube, hover: "hover:bg-red-600" },
 ];
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const solutionLinks = [...(await getServices()).map((service) => ({ href: `/services/${service.slug}`, label: service.name })), { href: "/services", label: "All services" }];
   return (
     <footer id="contact" className="pt-16 pb-12 bg-slate-950 text-slate-400 border-t border-slate-800 text-xs">
       <div className="max-w-7xl mx-auto px-6">

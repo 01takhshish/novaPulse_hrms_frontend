@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { requireUser } from "@/lib/auth/guard";
 import { signOutAction } from "@/lib/auth/actions";
+import { AdminNav } from "@/components/admin/admin-nav";
 
 export const metadata: Metadata = {
-  title: { default: "Leads", template: "%s | Nova Pulse Admin" },
+  title: { default: "Admin", template: "%s | Nova Pulse Admin" },
   robots: { index: false, follow: false },
 };
 
@@ -16,13 +17,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="min-h-screen bg-slate-100">
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-4">
-          <div className="flex items-baseline gap-3">
+          <div className="flex items-center gap-4">
             <Link href="/admin" className="text-base font-extrabold text-slate-900">
               Nova Pulse
             </Link>
-            <span className="text-xs font-semibold uppercase tracking-widest text-brand-800">
-              Leads
-            </span>
+            <AdminNav isAdmin={user.role === "admin"} />
           </div>
           <div className="flex items-center gap-4 text-xs">
             <Link href="/" className="font-semibold text-slate-500 hover:text-slate-900">
@@ -40,7 +39,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-6xl px-6 py-8">{children}</main>
+      <main id="main" className="mx-auto max-w-6xl px-6 py-8">{children}</main>
     </div>
   );
 }

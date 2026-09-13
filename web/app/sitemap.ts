@@ -1,12 +1,13 @@
 import type { MetadataRoute } from "next";
 import { industrySlugs } from "@/content/industries";
-import { serviceSlugs } from "@/content/services";
 import { getPosts } from "@/lib/blog";
+import { getServiceSlugs } from "@/lib/services";
 import { siteUrl } from "@/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const posts = await getPosts();
+  const serviceSlugs = await getServiceSlugs();
 
   return [
     { url: siteUrl, lastModified: now, changeFrequency: "weekly", priority: 1 },
@@ -40,3 +41,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/terms-conditions`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
   ];
 }
+
+export const revalidate = 300;

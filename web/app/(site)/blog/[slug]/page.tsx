@@ -1,13 +1,11 @@
+import { getPostRedirect } from "@/lib/blog";
+import { serializeJsonLd } from "@/lib/json-ld";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { MDXRemote } from "next-mdx-remote/rsc";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeSlug from "rehype-slug";
-import remarkGfm from "remark-gfm";
+import { notFound, permanentRedirect } from "next/navigation";
 import { FaArrowRight, FaClock } from "react-icons/fa6";
 import { DemoButton } from "@/components/demo-modal";
-import { mdxComponents } from "@/components/blog/mdx-components";
+import { PostBody } from "@/lib/blog/markdown";
 import { BlobBackdrop } from "@/components/motion/blob-backdrop";
 import { Reveal } from "@/components/motion/reveal";
 import { ReadingProgress } from "@/components/ui/reading-progress";
@@ -48,7 +46,11 @@ export default async function BlogPostPage({
 }) {
   const { slug } = await params;
   const post = await getPost(slug);
-  if (!post) notFound();
+  if (!post) {
+    const target = await getPostRedirect(slug);
+    if (target) permanentRedirect(`/blog/${target}`);
+    notFound();
+  }
 
   const more = (await getPosts()).filter((p) => p.slug !== slug).slice(0, 2);
 
@@ -72,7 +74,7 @@ export default async function BlogPostPage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }}
       />
       <ReadingProgress />
 
@@ -135,19 +137,7 @@ export default async function BlogPostPage({
 
             <div className={post.headings.length > 2 ? "lg:col-span-9 lg:order-1" : "lg:col-span-12"}>
             <div className="border-t border-slate-200 pt-10">
-              <MDXRemote
-                source={post.content}
-                components={mdxComponents}
-                options={{
-                  mdxOptions: {
-                    remarkPlugins: [remarkGfm],
-                    rehypePlugins: [
-                      rehypeSlug,
-                      [rehypeAutolinkHeadings, { behavior: "wrap" }],
-                    ],
-                  },
-                }}
-              />
+              <PostBody source={post.content} />
             </div>
 
             </div>

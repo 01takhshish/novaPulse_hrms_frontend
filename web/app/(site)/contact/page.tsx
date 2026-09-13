@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/json-ld";
 import type { Metadata } from "next";
 import { FaWhatsapp } from "react-icons/fa6";
 import { Icon } from "@/components/icon";
@@ -32,7 +33,7 @@ export default function ContactPage() {
   return (
     <>
       <script type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }} />
 
       <PageHero
         eyebrow="Contact"

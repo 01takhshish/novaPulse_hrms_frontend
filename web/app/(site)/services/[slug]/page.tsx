@@ -1,7 +1,9 @@
+import { getServiceRedirect } from "@/lib/services";
+import { serializeJsonLd } from "@/lib/json-ld";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { FaArrowRight, FaCalendarCheck, FaCircleCheck } from "react-icons/fa6";
 import { DemoButton } from "@/components/demo-modal";
 import { Icon } from "@/components/icon";
@@ -10,11 +12,16 @@ import { BlobBackdrop } from "@/components/motion/blob-backdrop";
 import { PayrollSavings } from "@/components/tools/payroll-savings";
 import { Counter } from "@/components/motion/counter";
 import { Reveal, RevealGroup } from "@/components/motion/reveal";
-import { getService, services } from "@/content/services";
+import { getService, getServiceSlugs } from "@/lib/services";
 import { site } from "@/lib/site";
 
-export function generateStaticParams() {
-  return services.map((service) => ({ slug: service.slug }));
+/**
+ * Prerenders every published service at build. `getServiceSlugs` degrades to the
+ * static list if the database is unreachable, so a blip during a deploy costs a
+ * stale set of prerendered pages rather than a failed build.
+ */
+export async function generateStaticParams() {
+  return (await getServiceSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -22,7 +29,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const service = getService((await params).slug);
+  const service = await getService((await params).slug);
   if (!service) return {};
   return {
     title: service.title,
@@ -41,12 +48,16 @@ export default async function ServicePage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const service = getService((await params).slug);
-  if (!service) notFound();
+  const service = await getService((await params).slug);
+  if (!service) {
+    const target = await getServiceRedirect((await params).slug);
+    if (target) permanentRedirect(`/services/${target}`);
+    notFound();
+  }
 
-  const related = service.related
-    .map(getService)
-    .filter((s): s is NonNullable<typeof s> => Boolean(s));
+  const related = (await Promise.all(service.related.map(getService))).filter(
+    (s): s is NonNullable<typeof s> => Boolean(s),
+  );
 
   const schema = {
     "@context": "https://schema.org",
@@ -72,7 +83,7 @@ export default async function ServicePage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify([schema, faqSchema]) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd([schema, faqSchema]) }}
       />
 
       {/* HERO */}

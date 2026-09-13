@@ -9,27 +9,30 @@ Repository overview and deployment summary: [`../README.md`](../README.md).
 - **34 pages**, everything prerendered except `/admin` and `/api`.
 - **Builds with no environment variables** — the database is only needed for the demo
   form and the admin area.
-- **42 tests** (Vitest, against a real Postgres), typecheck and lint enforced in CI.
+- Vitest integration tests, browser end-to-end tests, typecheck and lint are enforced in CI.
 
 ## Run it
 
 ```bash
 npm install
-cp .env.example .env.local        # then fill in DATABASE_URL and AUTH_SECRET
+cp .env.example .env.local        # then fill in Neon URLs and AUTH_SECRET
 npm run db:migrate                # apply the schema
 npm run db:seed-admin             # create your first admin login
+npm run db:seed-content           # import the MDX posts into the database
 npm run dev                       # http://localhost:3000
 ```
 
 | Command | Does |
 | --- | --- |
 | `npm run dev` / `build` / `start` | the app |
-| `npm test` | Vitest suite (needs a Postgres it can truncate) |
+| `npm test` | Vitest suite (needs an isolated local database named `*_test`) |
+| `npm run test:e2e` | production build plus Playwright browser tests (same isolated database rule) |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run db:generate` | write a new migration from schema changes |
 | `npm run db:migrate` | apply pending migrations |
 | `npm run db:studio` | browse the data |
 | `npm run db:seed-admin` | create or update an admin user |
+| `npm run db:seed-content` | one-time import of `content/blog/*.mdx` into `posts` (idempotent) |
 
 ## Illustrations
 
@@ -79,14 +82,29 @@ Two arrays in `content/company.ts` are **deliberately empty**: `leadership` and
 populating them would mean inventing facts about real people and real jobs. Both
 sections hide themselves until you fill them in.
 
-**Services** live in `content/services.ts` as typed data — one file drives the five
-service pages, the header dropdown, the footer, the sitemap and the per-service
-JSON-LD. Adding a sixth service means adding an object, not a page.
+**CMS scope is limited to Blog and Services.** Posts and service pages are managed at
+`/admin/blog` and `/admin/services`; public navigation, footer links, sitemap and JSON-LD
+read those published records. The other marketing pages remain code-managed, so the admin
+cannot accidentally alter legal, company, client or industry content.
 
-**Blog posts** are MDX in `content/blog/`, read at build time. Frontmatter is
-validated with Zod, so a post with a broken date or a missing description fails
-the build instead of publishing badly. Reading time is computed, tags are
-collected automatically, and `/blog/feed.xml` is generated from the same source.
+**Blog posts** live in Postgres and are written at `/admin/blog` — no commit, no
+redeploy. `lib/blog/` is the only thing the public pages talk to: `repository`
+holds the SQL, `service` holds the rules, `actions` holds the form handlers, and
+`index.ts` is the read API the pages use. Reading time and the on-this-page nav
+are **derived at read time**, never stored, so editing a body cannot leave them
+stale. `/blog/feed.xml` and the sitemap come from the same source, and drafts
+appear in none of them.
+
+The MDX files in `content/blog/` are the **seed source**, imported once by
+`npm run db:seed-content`. They are kept as a rollback path, not read at runtime.
+
+**Post bodies are Markdown, not MDX, and that is a security decision.**
+`MDXRemote` compiles and *evaluates* its source. That is fine for files in git,
+where a human reviews every commit; it is not fine for a database column, because
+then a phished marketing account is server-side code execution. Bodies render
+through `react-markdown` (`lib/blog/markdown.tsx`), which evaluates nothing. The
+one `<Callout>` from the MDX era survives as a `:::callout` directive, styled by
+the same component, so migrated posts look identical.
 
 **Motion** is hand-rolled rather than a library, for three reasons that matter
 on a site whose traffic is SEO-driven:
@@ -188,8 +206,6 @@ tests/                  Vitest: validation, service, csv, password
 
 ## Notes for whoever picks this up
 
-- **The demo form still posts to Formspree.** Phase 2 replaces `form.action` in
-  `components/demo-modal.tsx` with `POST /api/leads` backed by Postgres.
 - **Only two components ship JavaScript** — the header and the modal. Every section is a
   server component, so its markup and icons cost nothing on the client. Keep it that way:
   reach for `<DemoButton>` rather than making a whole section a client component.
@@ -221,10 +237,21 @@ tests/                  Vitest: validation, service, csv, password
   Data Fiduciary under the DPDP Act.
 - **Deleting a lead cascades to its notes**; removing a user leaves their notes
   in place with the author name intact, so history survives staff changes.
-- The privacy policy says enquiries are kept for 24 months. Nothing enforces
-  that yet — it needs a scheduled job, and it is the main open compliance item.
+- The daily maintenance job removes enquiries after 24 months unless they became a customer.
 
 ## Production notes
+
+- **Cover image uploads need `BLOB_READ_WRITE_TOKEN`** (Vercel dashboard →
+  Storage → Blob → Connect). Two config entries in `next.config.ts` go with it:
+  `https://*.public.blob.vercel-storage.com` in the CSP `img-src`, and the same
+  host in `images.remotePatterns`. Miss either and covers break in production
+  while working locally. Without the token the admin still works; uploads return
+  a 503 saying exactly what is missing.
+- **`POST /api/admin/upload` sniffs magic bytes**, not `Content-Type` and not the
+  extension — a `.php` renamed to `.png` is rejected on its first three bytes. The
+  stored filename is generated, never the client's, since an uploaded name can
+  carry path separators. The endpoint accepts up to 4 MB (within Vercel's request
+  limit), normalizes still images to WebP, and limits each admin to 40 uploads per hour.
 
 - **Security headers** live in `next.config.ts`: CSP, HSTS, `X-Frame-Options: DENY`,
   `nosniff`, Referrer-Policy, Permissions-Policy. The CSP is a static header rather than a
@@ -256,8 +283,9 @@ tests/                  Vitest: validation, service, csv, password
   exactly what unmasked it, so a trapped submission looks like success and is
   silently dropped. There is a test asserting the error kind is `rejected` and not
   `validation`, because that distinction is easy to break by accident.
-- **A failed notification email never fails a lead.** The lead is committed first;
-  the send is fire-and-forget and only logs on failure.
+- **A failed notification email never fails a lead.** The lead and a durable notification
+  job are committed together; sends retry with backoff through the lead request and daily
+  maintenance job.
 - **Sessions** are HS256 JWTs in an httpOnly, SameSite=Lax cookie, 8 hour expiry.
   Every request re-reads the user, so a deleted account loses access immediately
   rather than whenever its token happens to expire.
@@ -268,9 +296,11 @@ tests/                  Vitest: validation, service, csv, password
 
 ## Deploying to Vercel
 
-The app builds with **no environment variables at all** — all 34 pages prerender, so the
-marketing site works immediately. The database is only needed for the demo form and
-`/admin`; without it those two fail and nothing else does.
+The app builds with **no environment variables at all** — every page prerenders, so the
+marketing site works immediately. Blog reads degrade to an empty list rather than failing
+the build (`safely()` in `lib/blog/index.ts`), so a database blip during a deploy costs you
+the blog index, not the other thirty pages. The database is needed for the demo form,
+`/admin` and the blog; without it those fail and nothing else does.
 
 1. **Push this repo to GitHub.** Everything except `node_modules/`, `.next/` and the
    `.env*` files (roughly 2.4 MB).
@@ -279,18 +309,21 @@ marketing site works immediately. The database is only needed for the demo form 
    **Root Directory: `web`**. Framework and build command are detected. Deploy.
    You now have a working preview URL, which is served `noindex` (see `robots.ts`).
 
-3. **Create a Postgres database.** Vercel Storage → Neon, or neon.tech directly. Copy the
-   **pooled** connection string.
+3. **Create a Neon Postgres database.** Copy both connection strings from Neon: the
+   **pooled** URL for the application and the **direct** URL for schema changes.
 
 4. **Add environment variables** in Project → Settings → Environment Variables:
 
    | Name | Value | Required |
    | --- | --- | --- |
    | `DATABASE_URL` | Neon pooled connection string | for leads + admin |
+   | `DIRECT_DATABASE_URL` | Neon direct connection string | for migrations and seeds |
    | `AUTH_SECRET` | `openssl rand -base64 32` | for leads + admin |
+   | `CRON_SECRET` | separate `openssl rand -base64 32` value | for daily maintenance |
    | `RESEND_API_KEY` | from resend.com | optional |
    | `LEAD_NOTIFICATION_TO` | `growth@novapulse.co.in` | optional |
    | `LEAD_NOTIFICATION_FROM` | `Nova Pulse <notifications@yourdomain>` | optional |
+   | `BLOB_READ_WRITE_TOKEN` | added automatically by Storage → Blob → Connect | for blog cover uploads |
 
    `AUTH_SECRET` signs admin sessions **and** the HMAC that hashes visitor IPs — changing
    it later logs everyone out and orphans existing rate-limit buckets.
@@ -299,22 +332,31 @@ marketing site works immediately. The database is only needed for the demo form 
 
    ```bash
    cd web
-   DATABASE_URL="<neon-pooled-url>" npm run db:migrate
+   DIRECT_DATABASE_URL="<neon-direct-url>" npm run db:migrate
    ```
 
    Migrations are deliberately *not* wired into the build: preview deploys share the same
    database, and you do not want a preview build migrating production.
 
-6. **Create your admin login:**
+6. **Create your admin login, and import the existing posts:**
 
    ```bash
-   DATABASE_URL="<neon-pooled-url>" npm run db:seed-admin
+   DIRECT_DATABASE_URL="<neon-direct-url>" npm run db:seed-admin
+   DIRECT_DATABASE_URL="<neon-direct-url>" npm run db:seed-content
    ```
 
-7. **Redeploy** so the new variables are picked up, then check `/`, submit the demo form,
-   and sign in at `/admin`.
+   `db:seed-content` is idempotent — it skips any slug that already exists, so re-running
+   it can never overwrite a post someone has edited in `/admin`.
 
-8. **Point the domain.** Project → Settings → Domains → add `novapulse.co.in` and
+7. **Add a Blob store** if you want cover image uploads: Storage → Blob → Connect. This
+   sets `BLOB_READ_WRITE_TOKEN` for you. Skip it and everything else still works.
+
+8. **Redeploy** so the new variables are picked up, then check `/`, submit the demo form,
+   sign in at `/admin`, and create a draft and published record in each of Blog and Services.
+   `vercel.json` runs `/api/cron/maintenance` daily to retry notifications, purge expired
+   enquiries, prune rate-limit records and remove unreferenced uploads after a grace period.
+
+9. **Point the domain.** Project → Settings → Domains → add `novapulse.co.in` and
    `www.novapulse.co.in`, then update DNS at your registrar. Only do this once the preview
    looks right — until then the old site stays live and untouched.
 

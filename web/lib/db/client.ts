@@ -2,6 +2,7 @@ import "server-only";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { env } from "@/lib/env";
+import { connectionOptions } from "./config";
 import * as schema from "./schema";
 
 /**
@@ -18,8 +19,7 @@ function connection() {
     globalForDb.__novapulseSql = postgres(env().DATABASE_URL, {
       // Serverless invocations are short-lived; a large pool just starves the DB.
       max: process.env.VERCEL ? 1 : 10,
-      idle_timeout: 20,
-      connect_timeout: 10,
+      ...connectionOptions(env().DATABASE_URL),
     });
   }
   return globalForDb.__novapulseSql;

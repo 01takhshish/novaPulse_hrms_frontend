@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { leadSubmissionSchema } from "@/lib/leads/validation";
+import { useRef, useState } from "react";
 import { getAttribution } from "@/lib/attribution";
 import { site } from "@/lib/site";
 
@@ -16,10 +17,12 @@ export type LeadFormStatus =
  * error copy can never drift apart.
  */
 export function useLeadSubmit(source: string) {
+  const inFlight = useRef(false);
   const [status, setStatus] = useState<LeadFormStatus>({ kind: "idle" });
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (inFlight.current) return;
     const form = e.currentTarget;
     const data = new FormData(form);
     setStatus({ kind: "sending" });
@@ -32,10 +35,16 @@ export function useLeadSubmit(source: string) {
       service: String(data.get("service") ?? ""),
       message: String(data.get("message") ?? ""),
       _gotcha: String(data.get("_gotcha") ?? ""),
-      source,
+      source: source.slice(0, 64),
       ...getAttribution(),
     };
 
+    const parsed = leadSubmissionSchema.safeParse(payload);
+    if (!parsed.success) {
+      setStatus({ kind: "error", message: "Please check the highlighted fields.", fieldErrors: parsed.error.flatten().fieldErrors });
+      return;
+    }
+    inFlight.current = true;
     try {
       const response = await fetch("/api/leads", {
         method: "POST",
@@ -68,6 +77,8 @@ export function useLeadSubmit(source: string) {
         kind: "error",
         message: `We couldn't reach the server. Please check your connection, or message us on WhatsApp at ${site.phone}.`,
       });
+    } finally {
+      inFlight.current = false;
     }
   }
 

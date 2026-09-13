@@ -8,6 +8,27 @@
       "when": 1788712101075,
       "tag": "0000_init",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789131717070,
+      "tag": "0001_content",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789145104312,
+      "tag": "0002_services",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1789192170956,
+      "tag": "0003_production_hardening",
+      "breakpoints": true
     }
   ]
 }

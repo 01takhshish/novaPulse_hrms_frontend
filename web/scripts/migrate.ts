@@ -1,3 +1,4 @@
+import { connectionOptions, migrationUrl } from "../lib/db/config";
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
@@ -8,10 +9,10 @@ import postgres from "postgres";
  * own single-use connection so it never touches the app's pool.
  */
 async function main() {
-  const url = process.env.DATABASE_URL;
-  if (!url) throw new Error("DATABASE_URL is required to run migrations");
+  const url = migrationUrl();
+  if (!url) throw new Error("DIRECT_DATABASE_URL or DATABASE_URL is required to run migrations");
 
-  const sql = postgres(url, { max: 1 });
+  const sql = postgres(url, { max: 1, ...connectionOptions(url) });
   try {
     await migrate(drizzle(sql), { migrationsFolder: "./drizzle" });
     console.log("migrations applied");

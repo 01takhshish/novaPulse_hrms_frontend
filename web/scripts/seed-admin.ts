@@ -1,3 +1,4 @@
+import { connectionOptions, migrationUrl } from "../lib/db/config";
 import "dotenv/config";
 import { createInterface } from "node:readline/promises";
 import { eq } from "drizzle-orm";
@@ -11,7 +12,7 @@ import { users } from "../lib/db/schema";
  * ADMIN_PASSWORD when set (for scripted provisioning), otherwise prompts.
  */
 async function main() {
-  const url = process.env.DATABASE_URL;
+  const url = migrationUrl();
   if (!url) throw new Error("DATABASE_URL is required");
 
   const rl = createInterface({ input: process.stdin, output: process.stdout });
@@ -27,7 +28,7 @@ async function main() {
     throw new Error("Password must be at least 12 characters");
   }
 
-  const sql = postgres(url, { max: 1 });
+  const sql = postgres(url, { max: 1, ...connectionOptions(url) });
   const db = drizzle(sql, { schema: { users } });
   try {
     const passwordHash = await bcrypt.hash(password, 12);

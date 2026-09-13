@@ -14,7 +14,9 @@ const csp = [
   // HMR. Neither is permitted in production.
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  // The `blob:` here is the browser blob-URI scheme (used by the upload preview);
+  // the vercel-storage host is where admin-uploaded cover images actually live.
+  "img-src 'self' data: blob: https://*.public.blob.vercel-storage.com",
   "font-src 'self' data:",
   `connect-src 'self'${isDev ? " ws: http://localhost:* http://127.0.0.1:*" : ""}`,
   "form-action 'self'",
@@ -37,6 +39,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  distDir: process.env.NEXT_BUILD_DIR || ".next",
   // Next 16 rejects dev asset requests from origins it was not started on.
   allowedDevOrigins: ["localhost", "127.0.0.1"],
   poweredByHeader: false,
@@ -44,6 +47,15 @@ const nextConfig: NextConfig = {
   compress: true,
   images: {
     formats: ["image/avif", "image/webp"],
+    // Cover images uploaded from /admin. Without this next/image refuses to
+    // optimise them and throws at render time.
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
+        pathname: "/**",
+      },
+    ],
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

@@ -1,3 +1,4 @@
+import { getServiceForReference } from "@/lib/services";
 import { FaArrowRight, FaCircleCheck, FaShieldHalved, FaChartLine, FaUserGroup } from "react-icons/fa6";
 
 const pillars = [
@@ -48,7 +49,11 @@ const pillars = [
   },
 ];
 
-export function Pillars() {
+export async function Pillars() {
+  const links = await Promise.all(pillars.map(async (pillar) => {
+    const service = await getServiceForReference(pillar.href.split("/").pop()!);
+    return service ? `/services/${service.slug}` : "/services";
+  }));
   return (
     <section className="py-24 bg-white border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-6">
@@ -96,7 +101,7 @@ export function Pillars() {
                 </ul>
               </div>
               <a
-                href={pillar.href}
+                href={links[i]}
                 className="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-white border border-slate-300 font-bold text-sm text-slate-900 hover:bg-brand-800 hover:text-white hover:border-brand-800 transition-all shadow-sm"
               >
                 {pillar.cta} <FaArrowRight className="text-xs" />

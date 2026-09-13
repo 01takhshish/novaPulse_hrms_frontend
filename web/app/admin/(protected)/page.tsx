@@ -1,3 +1,4 @@
+import { requireUser } from "@/lib/auth/guard";
 import Link from "next/link";
 import { LeadFilters, LeadSearch } from "@/components/admin/lead-filters";
 import { LeadsTable } from "@/components/admin/leads-table";
@@ -13,6 +14,7 @@ export default async function AdminLeadsPage({
 }: {
   searchParams: SearchParams;
 }) {
+  await requireUser();
   const raw = await searchParams;
   // Unparseable query strings fall back to defaults rather than 500ing.
   const filter = leadFilterSchema.safeParse(raw).data ?? { page: 1 };
@@ -21,6 +23,7 @@ export default async function AdminLeadsPage({
 
   return (
     <div className="space-y-6">
+      {raw.error === "forbidden" && <p role="alert" className="rounded-xl bg-amber-50 p-4 text-sm text-amber-900">Your account has read-only access.</p>}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900">Leads</h1>
@@ -29,10 +32,10 @@ export default async function AdminLeadsPage({
           </p>
         </div>
         <a
-          href="/admin/export"
+          href={`/admin/export?${new URLSearchParams({ ...(filter.status ? { status: filter.status } : {}), ...(filter.query ? { query: filter.query } : {}) })}`}
           className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 transition-colors hover:bg-slate-50"
         >
-          Export CSV
+          Export matching leads (up to 5,000)
         </a>
       </div>
 

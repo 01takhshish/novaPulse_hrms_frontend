@@ -1,5 +1,9 @@
 import "server-only";
 import { z } from "zod";
+import { databaseUrlSchema } from "@/lib/db/config";
+
+const optional = <T extends z.ZodType>(schema: T) =>
+  z.preprocess((value) => typeof value === "string" && !value.trim() ? undefined : value, schema.optional());
 
 /**
  * Server-only environment contract.
@@ -10,13 +14,16 @@ import { z } from "zod";
  * loudly instead.
  */
 const envSchema = z.object({
-  DATABASE_URL: z.string().url("DATABASE_URL must be a valid Postgres connection string"),
+  DATABASE_URL: databaseUrlSchema,
   AUTH_SECRET: z
     .string()
     .min(32, "AUTH_SECRET must be at least 32 characters — generate with `openssl rand -base64 32`"),
-  RESEND_API_KEY: z.string().min(1).optional(),
-  LEAD_NOTIFICATION_TO: z.string().email().optional(),
-  LEAD_NOTIFICATION_FROM: z.string().min(1).optional(),
+  RESEND_API_KEY: optional(z.string().min(1)),
+  LEAD_NOTIFICATION_TO: optional(z.string().email()),
+  LEAD_NOTIFICATION_FROM: optional(z.string().min(1)),
+  /** Set by Vercel when a Blob store is connected; only cover uploads need it. */
+  BLOB_READ_WRITE_TOKEN: optional(z.string().min(1)),
+  CRON_SECRET: optional(z.string().min(32)),
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 });
 
@@ -41,4 +48,9 @@ export function env(): Env {
 export function emailConfigured(): boolean {
   const e = env();
   return Boolean(e.RESEND_API_KEY && e.LEAD_NOTIFICATION_TO && e.LEAD_NOTIFICATION_FROM);
+}
+
+/** Cover image uploads are optional; everything else in /admin works without them. */
+export function blobConfigured(): boolean {
+  return Boolean(env().BLOB_READ_WRITE_TOKEN);
 }

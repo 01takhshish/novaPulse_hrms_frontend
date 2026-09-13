@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/json-ld";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,7 +22,8 @@ export default async function BlogIndexPage({
 }) {
   const { tag } = await searchParams;
   const [posts, tags] = await Promise.all([getPosts(tag), getTags()]);
-  const [lead, ...rest] = posts;
+  const lead = posts.find((post) => post.featured) ?? posts[0];
+  const rest = posts.filter((post) => post.slug !== lead?.slug);
 
   const schema = {
     "@context": "https://schema.org",
@@ -40,7 +42,7 @@ export default async function BlogIndexPage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }}
       />
 
       <section className="relative overflow-hidden bg-gradient-to-b from-purple-100/70 via-slate-50 to-white pt-32 pb-16 md:pt-40 md:pb-20">

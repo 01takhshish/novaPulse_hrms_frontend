@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import { users, type UserRow } from "@/lib/db/schema";
 import { env } from "@/lib/env";
+import { isUuid } from "@/lib/ids";
 
 const COOKIE_NAME = "novapulse_session";
 const MAX_AGE_SECONDS = 60 * 60 * 8; // 8 hours
@@ -48,8 +49,8 @@ export async function getSessionUser(): Promise<SessionUser | null> {
   if (!token) return null;
 
   try {
-    const { payload } = await jwtVerify(token, secret(), { issuer: ISSUER });
-    if (!payload.sub) return null;
+    const { payload } = await jwtVerify(token, secret(), { issuer: ISSUER, algorithms: ["HS256"] });
+    if (!isUuid(payload.sub)) return null;
 
     const user = await db().query.users.findFirst({
       where: eq(users.id, payload.sub),

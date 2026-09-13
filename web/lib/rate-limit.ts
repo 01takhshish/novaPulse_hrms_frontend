@@ -1,12 +1,12 @@
 import "server-only";
 import { createHmac } from "node:crypto";
-import { and, count, eq, gte, lt } from "drizzle-orm";
+import { and, count, eq, gte, lt, min, sql } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import { rateLimitHits } from "@/lib/db/schema";
 import { env } from "@/lib/env";
 
 /**
- * Postgres-backed fixed-window limiter.
+ * Postgres-backed sliding-window limiter.
  *
  * An in-memory counter is useless on serverless (every invocation is a fresh
  * process), and Redis would mean another paid service for a form that sees a
@@ -33,17 +33,18 @@ export async function checkRateLimit(options: {
   const { bucket, limit, windowSeconds } = options;
   const windowStart = new Date(Date.now() - windowSeconds * 1000);
 
-  const [row] = await db()
-    .select({ value: count() })
-    .from(rateLimitHits)
-    .where(and(eq(rateLimitHits.bucket, bucket), gte(rateLimitHits.createdAt, windowStart)));
-
-  if (row.value >= limit) {
-    return { allowed: false, retryAfterSeconds: windowSeconds };
-  }
-
-  await db().insert(rateLimitHits).values({ bucket });
-  return { allowed: true, remaining: Math.max(0, limit - row.value - 1) };
+  return db().transaction(async (tx) => {
+    await tx.execute(sql`select pg_advisory_xact_lock(hashtextextended(${bucket}, 0))`);
+    const [row] = await tx.select({ value: count(), oldest: min(rateLimitHits.createdAt) })
+      .from(rateLimitHits)
+      .where(and(eq(rateLimitHits.bucket, bucket), gte(rateLimitHits.createdAt, windowStart)));
+    if (row.value >= limit) {
+      const retry = row.oldest ? Math.ceil((new Date(row.oldest).getTime() + windowSeconds * 1000 - Date.now()) / 1000) : windowSeconds;
+      return { allowed: false, retryAfterSeconds: Math.max(1, retry) };
+    }
+    await tx.insert(rateLimitHits).values({ bucket });
+    return { allowed: true, remaining: Math.max(0, limit - row.value - 1) };
+  });
 }
 
 /** Housekeeping so the table cannot grow without bound. */

@@ -1,5 +1,9 @@
 "use server";
 
+import { reportError } from "@/lib/errors";
+import { clientIp } from "@/lib/http";
+
+
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -11,8 +15,8 @@ import { verifyPassword } from "./password";
 import { createSession, destroySession } from "./session";
 
 const credentialsSchema = z.object({
-  email: z.string().trim().toLowerCase().email(),
-  password: z.string().min(1),
+  email: z.string().trim().toLowerCase().email().max(255),
+  password: z.string().min(1).max(72),
 });
 
 export type SignInState = { error?: string };
@@ -30,7 +34,8 @@ export async function signInAction(
   });
   if (!parsed.success) return { error: "Enter a valid email and password." };
 
-  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
+  try {
+  const ip = clientIp(await headers());
   const limit = await checkRateLimit({
     bucket: `login:${ip ? hashIdentifier(ip) : "unknown"}`,
     ...LOGIN_RATE_LIMIT,
@@ -47,11 +52,15 @@ export async function signInAction(
   // the form cannot be used to enumerate valid addresses.
   const valid = user
     ? await verifyPassword(parsed.data.password, user.passwordHash)
-    : await verifyPassword(parsed.data.password, "$2a$12$invalidinvalidinvalidinvalidinvalidinvalidinvalidinvalidin");
+    : await verifyPassword(parsed.data.password, "$2b$12$R9h/cIPz0gi.URNNX3kh2OPST9/PgBkqquzi.Ss7KIUgO2t0jWMUW");
 
   if (!user || !valid) return { error: "Incorrect email or password." };
 
   await createSession(user);
+  } catch (error) {
+    reportError("sign-in", error);
+    return { error: "Sign-in is temporarily unavailable. Please try again." };
+  }
   redirect("/admin");
 }
 

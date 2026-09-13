@@ -1,3 +1,4 @@
+import { requireUser } from "@/lib/auth/guard";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { NoteForm } from "@/components/admin/note-form";
@@ -14,6 +15,7 @@ export default async function LeadDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const user = await requireUser();
   const { id } = await params;
   const lead = await findLeadById(id);
   if (!lead) notFound();
@@ -42,7 +44,7 @@ export default async function LeadDetailPage({
             </div>
             <p className="mt-1 text-sm text-slate-500">{lead.company}</p>
           </div>
-          <StatusSelect leadId={lead.id} status={lead.status} />
+          {user.role === "admin" && <StatusSelect leadId={lead.id} status={lead.status} />}
         </div>
       </div>
 
@@ -78,7 +80,7 @@ export default async function LeadDetailPage({
             <h2 className="mb-4 text-xs font-bold uppercase tracking-widest text-brand-800">
               Notes
             </h2>
-            <NoteForm leadId={lead.id} />
+            {user.role === "admin" && <NoteForm leadId={lead.id} />}
             <ul className="mt-6 space-y-4">
               {lead.notes.length === 0 && (
                 <li className="text-xs text-slate-400">No notes yet.</li>

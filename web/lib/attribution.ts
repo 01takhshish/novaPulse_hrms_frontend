@@ -41,13 +41,17 @@ function readFromUrl(): Attribution {
 export function getAttribution(): Attribution {
   if (typeof window === "undefined") return {};
   try {
-    const fresh = readFromUrl();
     const stored = sessionStorage.getItem(STORAGE_KEY);
-    if (Object.keys(fresh).length > 0) {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
-      return fresh;
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        return Object.fromEntries([...PARAMS.map(([key]) => key), "referrer"].flatMap((key) =>
+          typeof parsed[key] === "string" ? [[key, parsed[key].slice(0, key === "referrer" ? 1000 : 120)]] : []));
+      }
     }
-    return stored ? (JSON.parse(stored) as Attribution) : {};
+    const fresh = readFromUrl();
+    if (Object.keys(fresh).length) sessionStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
+    return fresh;
   } catch {
     // Private browsing, disabled storage — attribution is nice to have, not essential.
     return {};

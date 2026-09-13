@@ -28,6 +28,7 @@ jobs:
 
     env:
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/novapulse_test
+      TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5432/novapulse_test
       AUTH_SECRET: ci-secret-that-is-long-enough-to-pass-validation
       NODE_ENV: test
 

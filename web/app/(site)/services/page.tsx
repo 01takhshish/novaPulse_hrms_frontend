@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/json-ld";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,17 +7,23 @@ import { DemoButton } from "@/components/demo-modal";
 import { Icon } from "@/components/icon";
 import { BlobBackdrop } from "@/components/motion/blob-backdrop";
 import { Reveal, RevealGroup } from "@/components/motion/reveal";
-import { services } from "@/content/services";
+import { getServices } from "@/lib/services";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "HRMS and payroll, biometric attendance, workplace security, corporate hiring and B2B lead generation — the five things Nova Pulse does for growing businesses.",
+    "HRMS and payroll, biometric attendance, workplace security, corporate hiring and B2B lead generation — what Nova Pulse does for growing businesses.",
   alternates: { canonical: "/services" },
 };
 
-export default function ServicesIndexPage() {
+/** The headline counts the services, and an admin can now add a sixth. */
+const COUNT_WORDS = ["No", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight"];
+
+export default async function ServicesIndexPage() {
+  const services = await getServices();
+  const countWord = COUNT_WORDS[services.length] ?? String(services.length);
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -32,7 +39,7 @@ export default function ServicesIndexPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }}
       />
 
       <section className="relative overflow-hidden bg-gradient-to-b from-purple-100/70 via-slate-50 to-white pt-32 pb-20 md:pt-40 md:pb-24">
@@ -47,7 +54,7 @@ export default function ServicesIndexPage() {
               </Reveal>
               <Reveal delay={80}>
                 <h1 className="text-4xl/[1.1] font-extrabold tracking-tight text-slate-900 md:text-6xl/[1.05]">
-                  Five services.
+                  {countWord} service{services.length === 1 ? "" : "s"}.
                   <br />
                   <span className="bg-gradient-to-r from-brand-900 via-purple-800 to-brand-700 bg-clip-text text-transparent">
                     One business partner.

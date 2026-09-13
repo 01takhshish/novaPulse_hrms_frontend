@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/json-ld";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FaArrowRight, FaQuoteLeft, FaStar } from "react-icons/fa6";
@@ -33,7 +34,7 @@ export default function ClientsPage() {
   return (
     <>
       <script type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }} />
 
       <PageHero
         eyebrow="Proof"
