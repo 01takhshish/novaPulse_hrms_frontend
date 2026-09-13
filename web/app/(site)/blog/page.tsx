@@ -21,7 +21,10 @@ export default async function BlogIndexPage({
   searchParams: Promise<{ tag?: string }>;
 }) {
   const { tag } = await searchParams;
-  const [posts, tags] = await Promise.all([getPosts(tag), getTags()]);
+  const [allPosts, tags] = await Promise.all([getPosts(), getTags()]);
+  const posts = tag
+    ? allPosts.filter((post) => post.tags.some((entry) => entry.toLowerCase() === tag.toLowerCase()))
+    : allPosts;
   const lead = posts.find((post) => post.featured) ?? posts[0];
   const rest = posts.filter((post) => post.slug !== lead?.slug);
 
@@ -67,41 +70,27 @@ export default async function BlogIndexPage({
               pipelines for growing Indian businesses. No vendor fluff.
             </p>
           </Reveal>
-          {tags.length > 0 && (
+          {(tags.length > 0 || tag) && (
             <Reveal delay={240}>
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
-                <Link
-                  href="/blog"
-                  aria-current={!tag ? "page" : undefined}
-                  className={`rounded-full border px-4 py-2 text-xs font-bold transition-colors ${
-                    !tag
-                      ? "border-brand-800 bg-brand-800 text-white"
-                      : "border-slate-200 bg-white text-slate-600 hover:border-brand-400"
-                  }`}
+              <form action="/blog" className="mt-8 flex items-center justify-center gap-2">
+                <label htmlFor="blog-tag" className="sr-only">Filter posts by topic</label>
+                <select
+                  id="blog-tag"
+                  name="tag"
+                  defaultValue={tag ?? ""}
+                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 shadow-sm focus:border-brand-700 focus:outline-none"
                 >
-                  All <span className={!tag ? "text-brand-200" : "text-slate-400"}>{tags.reduce((n, t) => n + t.count, 0)}</span>
-                </Link>
-                {tags.map((entry) => {
-                  const active = tag?.toLowerCase() === entry.tag.toLowerCase();
-                  return (
-                    <Link
-                      key={entry.tag}
-                      href={`/blog?tag=${encodeURIComponent(entry.tag)}`}
-                      aria-current={active ? "page" : undefined}
-                      className={`rounded-full border px-4 py-2 text-xs font-bold transition-colors ${
-                        active
-                          ? "border-brand-800 bg-brand-800 text-white"
-                          : "border-slate-200 bg-white text-slate-600 hover:border-brand-400"
-                      }`}
-                    >
-                      {entry.tag}{" "}
-                      <span className={active ? "text-brand-200" : "text-slate-400"}>
-                        {entry.count}
-                      </span>
-                    </Link>
-                  );
-                })}
-              </div>
+                  <option value="">All posts ({allPosts.length})</option>
+                  {tags.map((entry) => (
+                    <option key={entry.tag} value={entry.tag}>
+                      {entry.tag} ({entry.count})
+                    </option>
+                  ))}
+                </select>
+                <button type="submit" className="rounded-full bg-brand-800 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-brand-900">
+                  Filter
+                </button>
+              </form>
             </Reveal>
           )}
         </div>

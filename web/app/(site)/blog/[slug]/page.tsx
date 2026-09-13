@@ -1,6 +1,7 @@
 import { getPostRedirect } from "@/lib/blog";
 import { serializeJsonLd } from "@/lib/json-ld";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { FaArrowRight, FaClock } from "react-icons/fa6";
@@ -113,6 +114,22 @@ export default async function BlogPostPage({
 
         <div className="bg-white pb-20">
           <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-6 lg:grid-cols-12">
+            {post.cover && (
+              <div className={post.headings.length > 2 ? "lg:col-span-9 lg:order-1" : "lg:col-span-12"}>
+                <Reveal variant="scale">
+                  <figure className="relative aspect-[16/9] overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 shadow-sm">
+                    <Image
+                      src={post.cover}
+                      alt={post.coverAlt ?? ""}
+                      fill
+                      sizes="(min-width: 1024px) 960px, 100vw"
+                      className="object-cover"
+                      priority
+                    />
+                  </figure>
+                </Reveal>
+              </div>
+            )}
             {post.headings.length > 2 && (
               <aside className="lg:col-span-3 lg:order-2">
                 <nav aria-label="On this page" className="lg:sticky lg:top-28">
