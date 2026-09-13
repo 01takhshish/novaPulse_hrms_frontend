@@ -96,6 +96,15 @@ export async function updateLeadStatus(id: string, status: LeadStatus): Promise<
   return updated ?? null;
 }
 
+/** Notes and queued notifications are deleted by their database foreign keys. */
+export async function deleteLead(id: string): Promise<boolean> {
+  const [deleted] = await db()
+    .delete(leads)
+    .where(eq(leads.id, id))
+    .returning({ id: leads.id });
+  return Boolean(deleted);
+}
+
 export async function addNote(input: {
   leadId: string;
   authorId: string | null;

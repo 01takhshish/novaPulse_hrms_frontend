@@ -182,22 +182,6 @@ export default async function ServicePage({
         </div>
       </section>
 
-      {/* STATS (when the hero used a photo instead) */}
-      {service.image && (
-        <section className="border-y border-slate-200 bg-slate-900 py-10">
-          <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 px-6 sm:grid-cols-3">
-            {service.stats.map((stat, i) => (
-              <Reveal key={stat.label} delay={i * 90} className="text-center">
-                <div className="text-3xl font-extrabold text-white md:text-4xl">
-                  <Counter to={stat.value} prefix={stat.prefix} suffix={stat.suffix} decimals={stat.decimals} />
-                </div>
-                <div className="mt-1.5 text-xs text-slate-400">{stat.label}</div>
-              </Reveal>
-            ))}
-          </div>
-        </section>
-      )}
-
       {/* PROBLEMS */}
       <section className="border-b border-slate-200 bg-white py-24">
         <div className="mx-auto max-w-7xl px-6">

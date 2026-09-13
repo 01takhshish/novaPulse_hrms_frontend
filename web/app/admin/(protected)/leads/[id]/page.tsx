@@ -2,6 +2,7 @@ import { requireUser } from "@/lib/auth/guard";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { NoteForm } from "@/components/admin/note-form";
+import { DeleteLead } from "@/components/admin/delete-lead";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { StatusSelect } from "@/components/admin/status-select";
 import { findLeadById } from "@/lib/leads/service";
@@ -44,7 +45,12 @@ export default async function LeadDetailPage({
             </div>
             <p className="mt-1 text-sm text-slate-500">{lead.company}</p>
           </div>
-          {user.role === "admin" && <StatusSelect leadId={lead.id} status={lead.status} />}
+          {user.role === "admin" && (
+            <div className="flex flex-wrap items-center gap-3">
+              <StatusSelect leadId={lead.id} status={lead.status} />
+              <DeleteLead id={lead.id} name={lead.name} />
+            </div>
+          )}
         </div>
       </div>
 

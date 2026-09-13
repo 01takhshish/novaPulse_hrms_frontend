@@ -1,8 +1,9 @@
 import "server-only";
 import { err, ok, type Result } from "@/lib/result";
+import { reportError } from "@/lib/errors";
 import { checkRateLimit, hashIdentifier } from "@/lib/rate-limit";
 import * as repo from "./repository";
-import type { Lead, LeadCreateError } from "./types";
+import type { Lead, LeadCreateError, LeadDeleteError } from "./types";
 import { leadSubmissionSchema } from "./validation";
 
 /** Five submissions per IP per hour is generous for humans, hostile to scripts. */
@@ -78,3 +79,13 @@ export const countByStatus = repo.countByStatus;
 export const updateLeadStatus = repo.updateLeadStatus;
 export const addNote = repo.addNote;
 export const allLeadsForExport = repo.allLeadsForExport;
+
+export async function deleteLead(id: string): Promise<Result<true, LeadDeleteError>> {
+  try {
+    const deleted = await repo.deleteLead(id);
+    return deleted ? ok(true) : err({ kind: "not_found" });
+  } catch (error) {
+    reportError("lead-delete", error);
+    return err({ kind: "unavailable" });
+  }
+}

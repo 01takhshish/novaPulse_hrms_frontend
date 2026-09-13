@@ -209,9 +209,15 @@ function DemoModal({
               </div>
 
               <Field id="service" label="Primary Requirement" errors={fieldErrors.service}>
-                <select id="service" name="service" required defaultValue={service} className={leadInputClass}>
+                <select
+                  id="service"
+                  name="service"
+                  required
+                  defaultValue={service}
+                  className={`${leadInputClass} cursor-pointer bg-white text-slate-900 hover:border-brand-300 focus:ring-2 focus:ring-brand-100 ${fieldErrors.service ? leadErrorInputClass : ""}`}
+                >
                   {serviceOptions.map((value) => (
-                    <option key={value} value={value}>
+                    <option key={value} value={value} className="bg-white text-slate-900">
                       {value}
                     </option>
                   ))}

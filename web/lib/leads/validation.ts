@@ -53,6 +53,10 @@ export const updateLeadStatusSchema = z.object({
   status: leadStatusSchema,
 });
 
+export const deleteLeadSchema = z.object({
+  leadId: z.string().uuid(),
+});
+
 export const createNoteSchema = z.object({
   leadId: z.string().uuid(),
   body: z.string().trim().min(1, "Note cannot be empty").max(4000),

@@ -14,7 +14,7 @@ export default async function AdminLeadsPage({
 }: {
   searchParams: SearchParams;
 }) {
-  await requireUser();
+  const user = await requireUser();
   const raw = await searchParams;
   // Unparseable query strings fall back to defaults rather than 500ing.
   const filter = leadFilterSchema.safeParse(raw).data ?? { page: 1 };
@@ -44,7 +44,7 @@ export default async function AdminLeadsPage({
         <LeadSearch status={filter.status} query={filter.query} />
       </div>
 
-      <LeadsTable leads={page.leads} />
+      <LeadsTable leads={page.leads} canDelete={user.role === "admin"} />
 
       {page.pageCount > 1 && (
         <nav className="flex items-center justify-between text-xs" aria-label="Pagination">

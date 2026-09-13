@@ -1,12 +1,11 @@
 "use server";
 
 import { reportError } from "@/lib/errors";
-
-
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth/guard";
 import * as service from "./service";
-import { createNoteSchema, updateLeadStatusSchema } from "./validation";
+import { createNoteSchema, deleteLeadSchema, updateLeadStatusSchema } from "./validation";
 
 export type ActionState = { error?: string; success?: boolean };
 
@@ -68,4 +67,28 @@ export async function addNoteAction(
     reportError("lead-update", error);
     return { error: "Could not save your changes. Please try again." };
   }
+}
+
+/** Permanently removes a lead and its dependent notes and notification job. */
+export async function deleteLeadAction(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  await requireAdmin();
+
+  const parsed = deleteLeadSchema.safeParse({ leadId: formData.get("leadId") });
+  if (!parsed.success) return { error: "Invalid lead." };
+
+  const result = await service.deleteLead(parsed.data.leadId);
+  if (!result.ok) {
+    return {
+      error:
+        result.error.kind === "not_found"
+          ? "This lead has already been deleted."
+          : "Could not delete this lead. Please try again.",
+    };
+  }
+
+  revalidatePath("/admin");
+  redirect("/admin");
 }

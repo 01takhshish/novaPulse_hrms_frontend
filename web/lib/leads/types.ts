@@ -21,3 +21,7 @@ export type LeadCreateError =
   | { kind: "validation"; fieldErrors: Record<string, string[]> }
   | { kind: "rate_limited"; retryAfterSeconds: number }
   | { kind: "rejected" };
+
+export type LeadDeleteError =
+  | { kind: "not_found" }
+  | { kind: "unavailable" };

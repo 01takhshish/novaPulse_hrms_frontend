@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Lead } from "@/lib/leads/types";
+import { DeleteLead } from "./delete-lead";
 import { StatusBadge } from "./status-badge";
 
 const dateFormat = new Intl.DateTimeFormat("en-IN", {
@@ -9,7 +10,7 @@ const dateFormat = new Intl.DateTimeFormat("en-IN", {
   minute: "2-digit",
 });
 
-export function LeadsTable({ leads }: { leads: Lead[] }) {
+export function LeadsTable({ leads, canDelete }: { leads: Lead[]; canDelete: boolean }) {
   if (leads.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center">
@@ -30,6 +31,7 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
             <th scope="col" className="px-4 py-3 font-bold">Requirement</th>
             <th scope="col" className="px-4 py-3 font-bold">Status</th>
             <th scope="col" className="px-4 py-3 font-bold">Received</th>
+            {canDelete && <th scope="col" className="px-4 py-3 font-bold"><span className="sr-only">Actions</span></th>}
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
@@ -55,6 +57,11 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
               <td className="px-4 py-3 text-xs text-slate-500">
                 {dateFormat.format(lead.createdAt)}
               </td>
+              {canDelete && (
+                <td className="px-4 py-3 text-right">
+                  <DeleteLead id={lead.id} name={lead.name} />
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
