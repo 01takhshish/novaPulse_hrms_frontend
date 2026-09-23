@@ -76,12 +76,27 @@ export const services: ServiceContent[] = [
       {
         icon: "FaUsers",
         title: "Employee lifecycle management",
-        body: "Digital onboarding records, departmental hierarchies, leave approval chains and employee self-service, in one place.",
+        body: "Digital onboarding records, employee documents, departmental hierarchies and designations, in one place.",
+      },
+      {
+        icon: "FaClock",
+        title: "Attendance & shifts",
+        body: "Late coming, early leaving, shift schedules, overtime and attendance regularization, tracked automatically.",
       },
       {
         icon: "FaCalculator",
         title: "Automated payroll",
         body: "Work days, late marks, leave and overtime are read straight from biometric logs. PF, ESI and TDS apply automatically, and payslips generate in a single run.",
+      },
+      {
+        icon: "FaCalendarCheck",
+        title: "Leave management",
+        body: "Leave policies, balances, approval chains and holiday calendars, managed without spreadsheets.",
+      },
+      {
+        icon: "FaIdCardClip",
+        title: "Employee self-service",
+        body: "Employees check their own attendance, apply for leave, access documents and download payslips.",
       },
       {
         icon: "FaNetworkWired",
@@ -92,6 +107,11 @@ export const services: ServiceContent[] = [
         icon: "FaChartPie",
         title: "Statutory reporting",
         body: "Tax logs and compliance registers generated from the same data that produced the payslips, so the two can never disagree.",
+      },
+      {
+        icon: "FaChartLine",
+        title: "Performance & workforce analytics",
+        body: "Performance management and workforce reports that turn attendance and payroll data into management insight.",
       },
     ],
     stats: [

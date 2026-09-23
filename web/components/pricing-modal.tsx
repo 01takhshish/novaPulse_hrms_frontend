@@ -3,75 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import { useDemoModal } from "@/components/demo-modal";
-
-/** Plans and copy come from the NovaPulse HRMS brochure — keep them in sync with it. */
-const plans = [
-  {
-    id: "msme",
-    name: "MSME Plan",
-    blurb: "For small and growing businesses",
-    price: "₹799",
-    limit: "Up to 10 employees",
-    extra: "+ ₹40 / additional employee",
-    popular: false,
-    features: [
-      "Core HR",
-      "Employee Database",
-      "Leave Management",
-      "Basic Attendance",
-      "Employee Self-Service",
-      "Employee Documents",
-      "Basic Reports & HR Dashboard",
-    ],
-  },
-  {
-    id: "growth",
-    name: "Growth Plan",
-    blurb: "For businesses ready to automate HR",
-    price: "₹2,499",
-    limit: "Up to 30 employees",
-    extra: "+ ₹40 / additional employee",
-    popular: true,
-    features: [
-      "Everything in MSME",
-      "Advanced Attendance & Shifts",
-      "Biometric Integration",
-      "Overtime Management",
-      "Payroll, PF / ESI / PT",
-      "Salary Slips",
-      "Advanced Reports & Multi-Branch",
-    ],
-  },
-  {
-    id: "professional",
-    name: "Professional Plan",
-    blurb: "For growing, multi-location organizations",
-    price: "₹4,599",
-    limit: "Up to 50 employees",
-    extra: "+ ₹40 / additional employee",
-    popular: false,
-    features: [
-      "Everything in Growth",
-      "Advanced Payroll",
-      "Performance Management",
-      "Recruitment",
-      "Workforce Analytics",
-      "Custom Workflows & Roles",
-      "API / Integrations, Priority Support",
-    ],
-  },
-] as const;
-
-const customPlanPoints = [
-  "100+ employees",
-  "Multiple branches",
-  "Multiple companies",
-  "Complex payroll",
-  "Custom HR workflows",
-  "Special biometric needs",
-  "API / system integrations",
-  "Enterprise requirements",
-] as const;
+import { customPlanPoints, hrmsPlans as plans, pricingDisclaimer } from "@/content/pricing";
 
 export function PricingButton({
   className,
@@ -258,9 +190,7 @@ function PricingModal({
           </div>
 
           <p className="mt-6 text-[11px] text-slate-500 text-center leading-relaxed">
-            Pricing shown is indicative and may vary based on employee count, modules,
-            implementation requirements, biometric integration and customization. Contact
-            NovaPulse for the final commercial proposal.
+            {pricingDisclaimer}
           </p>
         </div>
       </div>

@@ -1,36 +1,62 @@
 import Image from "next/image";
 import {
   FaCalendarCheck,
+  FaCalendarDays,
   FaCalculator,
   FaFileInvoice,
+  FaMobileScreenButton,
   FaNetworkWired,
   FaChartPie,
   FaServer,
   FaUser,
+  FaUserClock,
   FaUsers,
   FaFingerprint,
 } from "react-icons/fa6";
 import { DemoButton } from "@/components/demo-modal";
 import { PricingButton } from "@/components/pricing-modal";
 
+/** The eight HRMS modules, mirroring the brochure's product overview. */
 const features = [
   {
     Icon: FaUsers,
-    title: "Employee Lifecycle Management",
-    blurb:
-      "Centralized digital onboarding records, structured departmental hierarchies, leave approvals, and employee self-service.",
+    title: "Core HR",
+    blurb: "Employee records, departments, designations and documents in one place.",
+  },
+  {
+    Icon: FaUserClock,
+    title: "Attendance",
+    blurb: "Late coming, early leaving, shifts, overtime and regularization.",
+  },
+  {
+    Icon: FaFingerprint,
+    title: "Biometric Integration",
+    blurb: "Fingerprint, face recognition and RFID devices connected to the HRMS.",
   },
   {
     Icon: FaCalculator,
-    title: "Automated Payroll Systems",
-    blurb:
-      "Eliminate calculation delays. Real-time sync with biometric logs handles PF, ESI, tax deductions, and generates salary slips.",
+    title: "Payroll",
+    blurb: "Automated salary processing, PF, ESI, TDS deductions and salary slips.",
+  },
+  {
+    Icon: FaCalendarDays,
+    title: "Leave Management",
+    blurb: "Leave policies, balances, approvals and holiday calendars.",
+  },
+  {
+    Icon: FaMobileScreenButton,
+    title: "Employee Self-Service",
+    blurb: "Employees check attendance, apply for leave and download payslips.",
   },
   {
     Icon: FaNetworkWired,
-    title: "Multi-Branch Architecture",
-    blurb:
-      "Consolidate attendance and shift schedules across multiple branches, warehouses, or stores into one central management dashboard.",
+    title: "Multi-Branch",
+    blurb: "Every branch, warehouse and store on one central dashboard.",
+  },
+  {
+    Icon: FaChartPie,
+    title: "Reports & Analytics",
+    blurb: "Workforce reports and management insights from one dashboard.",
   },
 ];
 
@@ -85,14 +111,14 @@ export function Hrms() {
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4">
+          <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
             {features.map(({ Icon, title, blurb }) => (
-              <div key={title} className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-9 h-9 rounded-lg bg-brand-100 text-brand-800 flex items-center justify-center font-bold text-sm shrink-0">
-                    <Icon  />
+              <div key={title} className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                <div className="flex items-center gap-2.5 mb-1.5">
+                  <div className="w-8 h-8 rounded-lg bg-brand-100 text-brand-800 flex items-center justify-center text-sm shrink-0">
+                    <Icon />
                   </div>
-                  <h3 className="font-bold text-slate-900 text-base">{title}</h3>
+                  <h3 className="font-bold text-slate-900 text-sm">{title}</h3>
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed">{blurb}</p>
               </div>
