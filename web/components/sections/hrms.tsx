@@ -11,6 +11,7 @@ import {
   FaFingerprint,
 } from "react-icons/fa6";
 import { DemoButton } from "@/components/demo-modal";
+import { PricingButton } from "@/components/pricing-modal";
 
 const features = [
   {
@@ -116,7 +117,7 @@ export function Hrms() {
           </div>
         </div>
 
-        <div className="text-center">
+        <div className="text-center flex flex-col sm:flex-row justify-center items-center gap-4">
           <DemoButton
             service="HRMS & Payroll"
             source="hrms-section"
@@ -124,6 +125,9 @@ export function Hrms() {
           >
             <FaCalendarCheck className="text-brand-200" /> Book an HRMS Demo
           </DemoButton>
+          <PricingButton className="px-8 py-4 border border-brand-800 text-brand-800 hover:bg-brand-50 font-bold rounded-xl transition-all inline-flex items-center gap-2">
+            <FaFileInvoice /> View HRMS Pricing
+          </PricingButton>
         </div>
       </div>
     </section>
