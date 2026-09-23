@@ -12,6 +12,7 @@ import { HowItWorks } from "@/components/sections/how-it-works";
 import { IndustriesStrip } from "@/components/sections/industries-strip";
 import { WhyUs } from "@/components/sections/why-us";
 import { Clients } from "@/components/sections/clients";
+import { Testimonials } from "@/components/sections/testimonials";
 import { Faq } from "@/components/sections/faq";
 import { About } from "@/components/sections/about";
 import { FinalCta } from "@/components/sections/final-cta";
@@ -47,6 +48,7 @@ export default function Home() {
       <HowItWorks />
       <WhyUs />
       <Clients />
+      <Testimonials />
       <Faq />
       <About />
       <FinalCta />
