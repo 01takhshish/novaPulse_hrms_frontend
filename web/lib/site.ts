@@ -81,6 +81,7 @@ export const mobileNavPrimary = [
 ] as const;
 
 export const mobileNavSecondary = [
+  { href: "/pricing", label: "Pricing" },
   { href: "/industries", label: "Industries" },
   { href: "/blog", label: "Blog" },
   { href: "/clients", label: "Clients & Partners" },

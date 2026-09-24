@@ -38,6 +38,7 @@ export function SiteHeader({ menu }: { menu: readonly MenuItem[] }) {
         <nav className="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600">
           <Dropdown label="Solutions" items={menu} allHref="/services" allLabel="View all services" />
           <Dropdown label="Industries" items={industriesMenu} allHref="/industries" allLabel="View all industries" />
+          <Link href="/pricing" className="py-2 hover:text-brand-800 transition-colors">Pricing</Link>
           <Link href="/blog" className="py-2 hover:text-brand-800 transition-colors">Blog</Link>
           <Link href="/about" className="py-2 hover:text-brand-800 transition-colors">About</Link>
           <Link href="/contact" className="py-2 hover:text-brand-800 transition-colors">Contact</Link>

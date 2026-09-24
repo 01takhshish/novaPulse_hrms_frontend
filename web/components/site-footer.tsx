@@ -17,6 +17,7 @@ const industryLinks = [
 
 const companyLinks = [
   { href: "/about", label: "About Nova Pulse" },
+  { href: "/pricing", label: "HRMS Pricing" },
   { href: "/clients", label: "Clients & Partners" },
   { href: "/blog", label: "Blog" },
   { href: "/careers", label: "Careers" },
