@@ -6,6 +6,20 @@ const optional = <T extends z.ZodType>(schema: T) =>
   z.preprocess((value) => typeof value === "string" && !value.trim() ? undefined : value, schema.optional());
 
 /**
+ * One notification recipient, or several separated by commas — the sales inbox
+ * and a personal mailbox usually both want a copy. Parsed into an array here so
+ * nothing downstream has to know about the comma.
+ */
+const emailList = z
+  .string()
+  .transform((value) => value.split(",").map((address) => address.trim()).filter(Boolean))
+  .refine((list) => list.length > 0, "Needs at least one email address")
+  .refine(
+    (list) => list.every((address) => z.string().email().safeParse(address).success),
+    "Every comma-separated entry must be a valid email address",
+  );
+
+/**
  * Server-only environment contract.
  *
  * Validated lazily rather than at module load: `next build` imports route
@@ -19,7 +33,7 @@ const envSchema = z.object({
     .string()
     .min(32, "AUTH_SECRET must be at least 32 characters — generate with `openssl rand -base64 32`"),
   RESEND_API_KEY: optional(z.string().min(1)),
-  LEAD_NOTIFICATION_TO: optional(z.string().email()),
+  LEAD_NOTIFICATION_TO: optional(emailList),
   LEAD_NOTIFICATION_FROM: optional(z.string().min(1)),
   /** Set by Vercel when a Blob store is connected; only cover uploads need it. */
   BLOB_READ_WRITE_TOKEN: optional(z.string().min(1)),

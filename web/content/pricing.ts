@@ -1,64 +1,47 @@
 /**
- * NovaPulse HRMS plans, verbatim from the HRMS brochure — rendered by the
- * homepage pricing modal and the /pricing page. Keep in sync with the brochure.
+ * NovaPulse HRMS is quoted per requirement rather than from a published rate
+ * card, so this file carries the inputs to that conversation instead of prices.
+ *
+ * The factors below are exactly the ones the HRMS brochure names as driving the
+ * commercial proposal — do not add others without something to back them up.
+ * Rendered by the homepage pricing modal and the /pricing page.
  */
-export const hrmsPlans = [
+
+/** What we need to know before putting a number on a proposal. */
+export const quoteFactors = [
   {
-    id: "msme",
-    name: "MSME Plan",
-    blurb: "For small and growing businesses",
-    price: "₹799",
-    limit: "Up to 10 employees",
-    extra: "+ ₹40 / additional employee",
-    popular: false,
-    features: [
-      "Core HR",
-      "Employee Database",
-      "Leave Management",
-      "Basic Attendance",
-      "Employee Self-Service",
-      "Employee Documents",
-      "Basic Reports & HR Dashboard",
-    ],
+    icon: "FaUsers",
+    title: "Team size",
+    blurb: "Your headcount today, and how fast you expect it to grow this year.",
   },
   {
-    id: "growth",
-    name: "Growth Plan",
-    blurb: "For businesses ready to automate HR",
-    price: "₹2,499",
-    limit: "Up to 30 employees",
-    extra: "+ ₹40 / additional employee",
-    popular: true,
-    features: [
-      "Everything in MSME",
-      "Advanced Attendance & Shifts",
-      "Biometric Integration",
-      "Overtime Management",
-      "Payroll, PF / ESI / PT",
-      "Salary Slips",
-      "Advanced Reports & Multi-Branch",
-    ],
+    icon: "FaCubes",
+    title: "Modules you need",
+    blurb: "Core HR, attendance, payroll, leave, self-service — all of it, or start with a part.",
   },
   {
-    id: "professional",
-    name: "Professional Plan",
-    blurb: "For growing, multi-location organizations",
-    price: "₹4,599",
-    limit: "Up to 50 employees",
-    extra: "+ ₹40 / additional employee",
-    popular: false,
-    features: [
-      "Everything in Growth",
-      "Advanced Payroll",
-      "Performance Management",
-      "Recruitment",
-      "Workforce Analytics",
-      "Custom Workflows & Roles",
-      "API / Integrations, Priority Support",
-    ],
+    icon: "FaFingerprint",
+    title: "Biometric setup",
+    blurb: "Fingerprint, face or RFID devices — and whether you already own the hardware.",
+  },
+  {
+    icon: "FaNetworkWired",
+    title: "Branches & entities",
+    blurb: "One office, several branches, or multiple companies under one group.",
+  },
+  {
+    icon: "FaScrewdriverWrench",
+    title: "Implementation",
+    blurb: "Migrating existing employee data, and the approval rules specific to how you work.",
+  },
+  {
+    icon: "FaCloudArrowUp",
+    title: "Integrations",
+    blurb: "APIs and links to the accounting or ERP systems you already run.",
   },
 ] as const;
 
+/** Requirements we are already set up to handle — from the brochure. */
 export const customPlanPoints = [
   "100+ employees",
   "Multiple branches",
@@ -70,5 +53,10 @@ export const customPlanPoints = [
   "Enterprise requirements",
 ] as const;
 
-export const pricingDisclaimer =
-  "Pricing shown is indicative and may vary based on employee count, modules, implementation requirements, biometric integration and customization. Contact NovaPulse for the final commercial proposal.";
+export const pricingHeading = "Let's build a plan around your business";
+
+export const pricingIntro =
+  "Every workforce runs differently, so we don't put a one-size rate card in front of you. Tell us how your team works and we'll scope a plan — and a price — that fits it.";
+
+export const pricingNote =
+  "Your final commercial proposal depends on employee count, modules, implementation requirements, biometric integration and customization. Share your requirement and we'll send it to you in writing — no obligation.";

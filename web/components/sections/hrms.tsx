@@ -152,7 +152,7 @@ export function Hrms() {
             <FaCalendarCheck className="text-brand-200" /> Book an HRMS Demo
           </DemoButton>
           <PricingButton className="px-8 py-4 border border-brand-800 text-brand-800 hover:bg-brand-50 font-bold rounded-xl transition-all inline-flex items-center gap-2">
-            <FaFileInvoice /> View HRMS Pricing
+            <FaFileInvoice /> Get Custom Pricing
           </PricingButton>
         </div>
       </div>
