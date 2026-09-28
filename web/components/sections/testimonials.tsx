@@ -1,5 +1,7 @@
-import { FaQuoteLeft } from "react-icons/fa6";
-import { testimonials } from "@/content/clients";
+import Link from "next/link";
+import { FaArrowRight, FaQuoteLeft } from "react-icons/fa6";
+import { Icon } from "@/components/icon";
+import { clients, testimonials } from "@/content/clients";
 
 /** "Mr. Praveen Yadav" → "PY" for the avatar disc. */
 function initials(name: string) {
@@ -65,6 +67,31 @@ export function Testimonials() {
               </figcaption>
             </figure>
           ))}
+        </div>
+
+        <div data-reveal="up" className="mt-14 border-t border-slate-200 pt-10">
+          <p className="mb-6 text-center text-xs font-bold uppercase tracking-widest text-slate-500">
+            Teams already running on Nova Pulse
+          </p>
+          <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+            {clients.map((client) => (
+              <li
+                key={client.name}
+                className="inline-flex items-center gap-2 text-sm font-bold text-slate-700"
+              >
+                <Icon name={client.icon} className="text-brand-700" />
+                {client.name}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 text-center">
+            <Link
+              href="/clients"
+              className="link-underline inline-flex items-center gap-2 py-1.5 text-sm font-bold text-brand-800"
+            >
+              See clients &amp; partners <FaArrowRight className="text-xs" />
+            </Link>
+          </div>
         </div>
       </div>
     </section>

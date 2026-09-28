@@ -7,7 +7,7 @@ import { industries } from "@/content/industries";
  * The sectors we have deployed in, as links — this row is how the /industries
  * pages get their internal links, which is what it was always really for.
  *
- * Client names and technology partners live on /clients, linked below.
+ * Client names now sit in the proof section; partners live on /clients.
  */
 export function Sectors() {
   return (
@@ -44,12 +44,6 @@ export function Sectors() {
             className="link-underline inline-flex items-center gap-2 py-1.5 text-sm font-bold text-brand-800"
           >
             See all industries <FaArrowRight className="text-xs" />
-          </Link>
-          <Link
-            href="/clients"
-            className="link-underline inline-flex items-center gap-2 py-1.5 text-sm font-bold text-brand-800"
-          >
-            See clients &amp; partners <FaArrowRight className="text-xs" />
           </Link>
         </div>
       </div>
