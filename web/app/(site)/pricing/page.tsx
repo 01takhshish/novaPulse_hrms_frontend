@@ -10,6 +10,7 @@ import {
   quoteFactors,
 } from "@/content/pricing";
 import { site } from "@/lib/site";
+import { btnPrimary, btnPrimaryOnDark, btnSecondary } from "@/lib/ui/button";
 
 export const metadata: Metadata = {
   title: "HRMS Pricing & Custom Plans",
@@ -84,7 +85,7 @@ export default function PricingPage() {
               <DemoButton
                 service="HRMS & Payroll"
                 source="pricing-page-custom"
-                className="px-7 py-3.5 rounded-xl bg-white text-slate-900 hover:bg-slate-100 text-sm font-bold transition-colors"
+                className={btnPrimaryOnDark}
               >
                 Connect With Us
               </DemoButton>
@@ -99,7 +100,7 @@ export default function PricingPage() {
             <DemoButton
               service="HRMS & Payroll"
               source="pricing-page-cta"
-              className="px-8 py-4 bg-brand-800 hover:bg-brand-900 text-white font-bold rounded-xl shadow-lg transition-all inline-flex items-center gap-2"
+              className={btnPrimary}
             >
               <FaCalendarCheck className="text-brand-200" /> Book a Free Demo
             </DemoButton>
@@ -107,13 +108,13 @@ export default function PricingPage() {
               href={site.whatsappWithMessage}
               target="_blank"
               rel="noopener"
-              className="px-8 py-4 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-bold transition-all inline-flex items-center gap-2"
+              className={btnSecondary}
             >
               <FaWhatsapp className="w-5 h-5 text-emerald-600" /> Talk to an HRMS Expert
             </a>
             <a
               href={site.phoneHref}
-              className="px-8 py-4 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-bold transition-all inline-flex items-center gap-2"
+              className={btnSecondary}
             >
               <FaPhone className="w-4 h-4 text-brand-700" /> {site.phone}
             </a>

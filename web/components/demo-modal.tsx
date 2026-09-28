@@ -152,7 +152,7 @@ function DemoModal({
           type="button"
           onClick={onClose}
           aria-label="Close modal"
-          className="absolute top-5 right-5 text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-full p-2 transition-colors"
+          className="absolute top-4 right-4 flex h-11 w-11 items-center justify-center rounded-full bg-slate-100 text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-600"
         >
           <FaXmark className="text-lg" />
         </button>

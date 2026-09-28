@@ -69,7 +69,7 @@ export default function Products() {
           <li>
             <Link
               href="/"
-              className="text-slate-300 hover:text-white text-base font-medium pb-1.5 border-b-2 border-transparent hover:border-white transition-colors"
+              className="inline-flex min-h-11 items-end text-slate-300 hover:text-white text-base font-medium pb-1.5 border-b-2 border-transparent hover:border-white transition-colors"
             >
               Home
             </Link>
@@ -77,7 +77,7 @@ export default function Products() {
           <li>
             <Link
               href="/products"
-              className="text-white text-base font-medium pb-1.5 border-b-2 border-white"
+              className="inline-flex min-h-11 items-end text-white text-base font-medium pb-1.5 border-b-2 border-white"
             >
               Business Store
             </Link>
@@ -144,13 +144,13 @@ export default function Products() {
             </div>
             <div className="flex items-center gap-4 text-blue-200 text-base">
               <FaPhone className="text-white w-5 text-center" />
-              <a href={site.phoneHref} className="hover:text-white transition-colors">
+              <a href={site.phoneHref} className="tap hover:text-white transition-colors">
                 {site.phone}
               </a>
             </div>
             <div className="flex items-center gap-4 text-blue-200 text-base">
               <FaEnvelope className="text-white w-5 text-center" />
-              <a href={`mailto:${site.email}`} className="hover:text-white transition-colors break-all">
+              <a href={`mailto:${site.email}`} className="tap hover:text-white transition-colors break-all">
                 {site.email}
               </a>
             </div>
@@ -160,7 +160,7 @@ export default function Products() {
             <p className="text-blue-200 mb-2.5">
               Stay updated with our latest products and offers.
             </p>
-            <div className="flex gap-4">
+            <div className="-ml-2.5 flex gap-1">
               {socials.map(({ href, label, Icon }) => (
                 <a
                   key={label}
@@ -168,7 +168,7 @@ export default function Products() {
                   target="_blank"
                   rel="noopener"
                   aria-label={label}
-                  className="text-blue-200 text-2xl hover:text-white hover:scale-110 transition-all"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-blue-200 text-2xl transition-all hover:text-white hover:scale-110"
                 >
                   <Icon />
                 </a>

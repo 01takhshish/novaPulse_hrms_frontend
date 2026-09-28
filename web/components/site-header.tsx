@@ -7,6 +7,7 @@ import { FaBars, FaChevronDown, FaPhone, FaXmark } from "react-icons/fa6";
 import { Icon } from "@/components/icon";
 import { industriesMenu, mobileNavPrimary, mobileNavSecondary, site } from "@/lib/site";
 import { useDemoModal } from "./demo-modal";
+import { btnPrimarySm } from "@/lib/ui/button";
 
 type MenuItem = { readonly href: string; readonly icon: string; readonly title: string; readonly blurb: string };
 
@@ -45,24 +46,24 @@ export function SiteHeader({ menu }: { menu: readonly MenuItem[] }) {
         </nav>
 
         <div className="hidden xl:flex items-center gap-4">
-          <a href={site.phoneHref} className="py-2 text-sm font-bold text-slate-700 hover:text-brand-800 inline-flex items-center whitespace-nowrap">
+          <a href={site.phoneHref} className="min-h-11 py-2 text-sm font-bold text-slate-700 hover:text-brand-800 inline-flex items-center whitespace-nowrap">
             <FaPhone className="mr-1.5 text-brand-700" /> {site.phone}
           </a>
           <button type="button" onClick={() => openDemo("General Inquiry", "header")}
-            className="bg-brand-800 hover:bg-brand-900 text-white text-sm font-bold px-5 py-2.5 rounded-xl shadow-md transition-all hover:scale-102 whitespace-nowrap">
+            className={`${btnPrimarySm} whitespace-nowrap`}>
             Book a Free Demo
           </button>
         </div>
 
         {/* CTA still reachable between lg and xl, where the phone number does not fit */}
         <button type="button" onClick={() => openDemo("General Inquiry", "header")}
-          className="hidden lg:block xl:hidden bg-brand-800 hover:bg-brand-900 text-white text-sm font-bold px-4 py-2.5 rounded-xl shadow-md transition-all whitespace-nowrap">
+          className={`${btnPrimarySm} hidden lg:inline-flex xl:hidden whitespace-nowrap`}>
           Book a Demo
         </button>
 
         <button type="button" onClick={() => setMobileOpen((v) => !v)}
           aria-label="Toggle navigation menu" aria-expanded={mobileOpen} aria-controls="mobileNav"
-          className="lg:hidden text-slate-700 text-2xl focus:outline-none">
+          className="lg:hidden -mr-2 flex h-11 w-11 items-center justify-center rounded-xl text-2xl text-slate-700 transition-colors hover:bg-slate-100">
           {mobileOpen ? <FaXmark /> : <FaBars />}
         </button>
       </div>
@@ -77,12 +78,12 @@ export function SiteHeader({ menu }: { menu: readonly MenuItem[] }) {
             </Link>
           ))}
           <div className="pt-3">
-            <a href={site.phoneHref} className="mb-3 block py-2 text-sm font-bold text-brand-800">
+            <a href={site.phoneHref} className="tap mb-3 py-2 text-sm font-bold text-brand-800">
               <FaPhone className="mr-1.5 inline" /> {site.phone}
             </a>
             <button type="button"
               onClick={() => { setMobileOpen(false); openDemo("General Inquiry", "mobile-nav"); }}
-              className="w-full bg-brand-800 hover:bg-brand-900 text-white font-bold py-3 rounded-xl shadow-md">
+              className={`${btnPrimarySm} w-full`}>
               Book a Free Demo
             </button>
           </div>

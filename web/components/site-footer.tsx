@@ -58,7 +58,7 @@ export async function SiteFooter() {
                   target="_blank"
                   rel="noopener"
                   aria-label={label}
-                  className={`w-8 h-8 rounded-lg bg-slate-800 ${hover} text-white flex items-center justify-center transition-colors`}
+                  className={`w-11 h-11 rounded-xl bg-slate-800 ${hover} text-white flex items-center justify-center transition-colors`}
                 >
                   <Icon className="text-sm" />
                 </a>
@@ -71,7 +71,7 @@ export async function SiteFooter() {
             <ul className="space-y-1">
               {solutionLinks.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="inline-block py-1.5 hover:text-brand-400 transition-colors">
+                  <Link href={link.href} className="tap py-1.5 hover:text-brand-400 transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -84,7 +84,7 @@ export async function SiteFooter() {
             <ul className="space-y-1">
               {industryLinks.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="inline-block py-1.5 hover:text-brand-400 transition-colors">
+                  <Link href={link.href} className="tap py-1.5 hover:text-brand-400 transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -97,7 +97,7 @@ export async function SiteFooter() {
             <ul className="space-y-1">
               {companyLinks.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="inline-block py-1.5 hover:text-brand-400 transition-colors">
+                  <Link href={link.href} className="tap py-1.5 hover:text-brand-400 transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -110,13 +110,13 @@ export async function SiteFooter() {
             <ul className="space-y-1.5">
               <li className="flex items-start gap-2">
                 <FaPhone className="text-brand-400 mt-0.5 shrink-0" />
-                <a href={site.phoneHref} className="inline-block py-1 hover:text-white transition-colors">
+                <a href={site.phoneHref} className="tap py-1 hover:text-white transition-colors">
                   {site.phone}
                 </a>
               </li>
               <li className="flex items-start gap-2">
                 <FaEnvelope className="text-brand-400 mt-0.5 shrink-0" />
-                <a href={`mailto:${site.email}`} className="inline-block py-1 hover:text-white transition-colors break-all">
+                <a href={`mailto:${site.email}`} className="tap py-1 hover:text-white transition-colors break-all">
                   {site.email}
                 </a>
               </li>
@@ -138,11 +138,11 @@ export async function SiteFooter() {
             MSME: {site.msme}
           </p>
           <div className="flex items-center gap-4">
-            <Link href="/privacy-policy" className="inline-block py-1.5 hover:text-slate-300 transition-colors">
+            <Link href="/privacy-policy" className="tap py-1.5 hover:text-slate-300 transition-colors">
               Privacy Policy
             </Link>
             <span>•</span>
-            <Link href="/terms-conditions" className="inline-block py-1.5 hover:text-slate-300 transition-colors">
+            <Link href="/terms-conditions" className="tap py-1.5 hover:text-slate-300 transition-colors">
               Terms of Service
             </Link>
           </div>

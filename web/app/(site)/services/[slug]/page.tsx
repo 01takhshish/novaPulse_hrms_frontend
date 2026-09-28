@@ -14,6 +14,7 @@ import { Counter } from "@/components/motion/counter";
 import { Reveal, RevealGroup } from "@/components/motion/reveal";
 import { getService, getServiceSlugs } from "@/lib/services";
 import { site } from "@/lib/site";
+import { btnPrimary, btnPrimaryOnBrand, btnSecondary, btnSecondaryOnBrand } from "@/lib/ui/button";
 
 /**
  * Prerenders every published service at build. `getServiceSlugs` degrades to the
@@ -92,9 +93,9 @@ export default async function ServicePage({
         <div className="relative z-10 mx-auto max-w-7xl px-6">
           <Reveal>
             <nav aria-label="Breadcrumb" className="mb-6 text-xs font-semibold text-slate-500">
-              <Link href="/" className="inline-block py-1.5 hover:text-brand-800">Home</Link>
+              <Link href="/" className="tap py-1.5 hover:text-brand-800">Home</Link>
               <span className="mx-2 text-slate-300">/</span>
-              <Link href="/services" className="inline-block py-1.5 hover:text-brand-800">Services</Link>
+              <Link href="/services" className="tap py-1.5 hover:text-brand-800">Services</Link>
               <span className="mx-2 text-slate-300">/</span>
               <span className="text-slate-900">{service.name}</span>
             </nav>
@@ -128,7 +129,7 @@ export default async function ServicePage({
                   <DemoButton
                     service={service.name}
                     source={`service-${service.slug}-hero`}
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-800 px-8 py-4 text-base font-bold text-white shadow-lg shadow-brand-900/20 transition-all hover:scale-102 hover:bg-brand-900 sm:w-auto"
+                    className={`${btnPrimary} w-full sm:w-auto`}
                   >
                     <FaCalendarCheck className="text-brand-200" /> Book a free demo
                   </DemoButton>
@@ -136,7 +137,7 @@ export default async function ServicePage({
                     href={site.whatsapp}
                     target="_blank"
                     rel="noopener"
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-8 py-4 text-base font-bold text-slate-800 shadow-sm transition-all hover:bg-slate-100 sm:w-auto"
+                    className={`${btnSecondary} w-full sm:w-auto`}
                   >
                     Talk to an expert
                   </a>
@@ -320,7 +321,7 @@ export default async function ServicePage({
             {service.faqs.map((faq, i) => (
               <Reveal key={faq.question} delay={i * 70}>
                 <details className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm open:border-brand-300">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-bold text-slate-900 marker:hidden">
+                  <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 py-1 text-base font-bold text-slate-900 marker:hidden">
                     {faq.question}
                     <span
                       aria-hidden="true"
@@ -387,13 +388,13 @@ export default async function ServicePage({
                   <DemoButton
                     service={service.name}
                     source={`service-${service.slug}-cta`}
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 text-base font-bold text-brand-900 shadow-lg transition-all hover:scale-102 sm:w-auto"
+                    className={`${btnPrimaryOnBrand} w-full sm:w-auto`}
                   >
                     <FaCircleCheck className="text-brand-700" /> Book a free demo
                   </DemoButton>
                   <a
                     href={site.phoneHref}
-                    className="inline-flex w-full items-center justify-center rounded-xl border border-white/25 px-8 py-4 text-base font-bold text-white transition-all hover:bg-white/10 sm:w-auto"
+                    className={`${btnSecondaryOnBrand} w-full sm:w-auto`}
                   >
                     {site.phone}
                   </a>

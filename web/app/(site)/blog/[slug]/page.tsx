@@ -12,6 +12,7 @@ import { Reveal } from "@/components/motion/reveal";
 import { ReadingProgress } from "@/components/ui/reading-progress";
 import { formatPostDate, getPost, getPostSlugs, getPosts } from "@/lib/blog";
 import { site } from "@/lib/site";
+import { btnPrimaryOnBrand } from "@/lib/ui/button";
 
 export async function generateStaticParams() {
   return (await getPostSlugs()).map((slug) => ({ slug }));
@@ -85,9 +86,9 @@ export default async function BlogPostPage({
           <div className="relative z-10 mx-auto max-w-3xl px-6">
             <Reveal>
               <nav aria-label="Breadcrumb" className="mb-6 text-xs font-semibold text-slate-500">
-                <Link href="/" className="inline-block py-1.5 hover:text-brand-800">Home</Link>
+                <Link href="/" className="tap py-1.5 hover:text-brand-800">Home</Link>
                 <span className="mx-2 text-slate-300">/</span>
-                <Link href="/blog" className="inline-block py-1.5 hover:text-brand-800">Blog</Link>
+                <Link href="/blog" className="tap py-1.5 hover:text-brand-800">Blog</Link>
               </nav>
             </Reveal>
             <Reveal delay={60}>
@@ -172,7 +173,7 @@ export default async function BlogPostPage({
                   </p>
                   <DemoButton
                     source={`blog-${post.slug}`}
-                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-bold text-brand-900 shadow-lg transition-transform hover:scale-102"
+                    className={`${btnPrimaryOnBrand} mt-6`}
                   >
                     Book a free demo <FaArrowRight className="text-xs" />
                   </DemoButton>

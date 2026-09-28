@@ -1,5 +1,6 @@
 import { DemoButton } from "@/components/demo-modal";
 import { site } from "@/lib/site";
+import { btnPrimaryOnDark, btnSecondaryOnDark } from "@/lib/ui/button";
 
 export function FinalCta() {
   return (
@@ -19,7 +20,7 @@ export function FinalCta() {
           <DemoButton
             service="General Inquiry"
             source="final-cta"
-            className="px-8 py-4 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-base transition-all shadow-lg w-full sm:w-auto"
+            className={`${btnPrimaryOnDark} w-full sm:w-auto`}
           >
             Book a Free Demo
           </DemoButton>
@@ -27,7 +28,7 @@ export function FinalCta() {
             href={site.whatsapp}
             target="_blank"
             rel="noopener"
-            className="px-8 py-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-bold text-base transition-all w-full sm:w-auto"
+            className={`${btnSecondaryOnDark} w-full sm:w-auto`}
           >
             Talk to an Expert
           </a>

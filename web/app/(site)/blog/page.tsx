@@ -78,7 +78,7 @@ export default async function BlogIndexPage({
                   id="blog-tag"
                   name="tag"
                   defaultValue={tag ?? ""}
-                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 shadow-sm focus:border-brand-700 focus:outline-none"
+                  className="h-11 rounded-full border border-slate-200 bg-white px-4 text-xs font-bold text-slate-700 shadow-sm focus:border-brand-700"
                 >
                   <option value="">All posts ({allPosts.length})</option>
                   {tags.map((entry) => (
@@ -87,7 +87,7 @@ export default async function BlogIndexPage({
                     </option>
                   ))}
                 </select>
-                <button type="submit" className="rounded-full bg-brand-800 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-brand-900">
+                <button type="submit" className="h-11 rounded-full bg-brand-800 px-5 text-xs font-bold text-white transition-colors hover:bg-brand-900">
                   Filter
                 </button>
               </form>
@@ -104,7 +104,7 @@ export default async function BlogIndexPage({
               <p className="mt-4 text-sm font-semibold text-slate-900">
                 Nothing tagged &ldquo;{tag}&rdquo; yet
               </p>
-              <Link href="/blog" className="link-underline mt-2 inline-block py-1.5 text-sm font-bold text-brand-800">
+              <Link href="/blog" className="link-underline tap mt-2 py-1.5 text-sm font-bold text-brand-800">
                 See all posts
               </Link>
             </div>
@@ -181,7 +181,7 @@ export default async function BlogIndexPage({
               <Reveal className="mt-14 text-center">
                 <a
                   href="/blog/feed.xml"
-                  className="inline-flex items-center gap-2 py-2 text-xs font-bold text-slate-500 hover:text-brand-800"
+                  className="tap gap-2 py-2 text-xs font-bold text-slate-500 hover:text-brand-800"
                 >
                   <FaRss /> Subscribe via RSS
                 </a>

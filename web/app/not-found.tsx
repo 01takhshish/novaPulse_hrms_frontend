@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { site } from "@/lib/site";
+import { btnPrimary } from "@/lib/ui/button";
 
 export const metadata = { title: "Page not found" };
 
@@ -20,7 +21,7 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/"
-            className="px-7 py-3.5 rounded-xl bg-brand-800 hover:bg-brand-900 text-white font-bold text-sm transition-colors shadow-lg shadow-brand-900/20"
+            className={btnPrimary}
           >
             Back to homepage
           </Link>

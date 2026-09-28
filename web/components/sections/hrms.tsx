@@ -15,6 +15,7 @@ import {
 } from "react-icons/fa6";
 import { DemoButton } from "@/components/demo-modal";
 import { PricingButton } from "@/components/pricing-modal";
+import { btnPrimary, btnSecondary } from "@/lib/ui/button";
 
 /** The eight HRMS modules, mirroring the brochure's product overview. */
 const features = [
@@ -97,7 +98,7 @@ export function Hrms() {
                 sizes="(min-width: 1024px) 600px, 100vw"
                 className="w-full h-auto rounded-2xl object-cover group-hover:scale-[1.02] transition-transform duration-500"
               />
-              <div className="p-4 bg-slate-50/90 backdrop-blur mt-3 rounded-xl border border-slate-100 flex items-center justify-between">
+              <div className="p-4 bg-slate-50/90 backdrop-blur mt-3 rounded-2xl border border-slate-100 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-brand-700 animate-pulse" />
                   <span className="text-xs font-bold text-slate-900">
@@ -147,11 +148,11 @@ export function Hrms() {
           <DemoButton
             service="HRMS & Payroll"
             source="hrms-section"
-            className="px-8 py-4 bg-brand-800 hover:bg-brand-900 text-white font-bold rounded-xl shadow-lg transition-all inline-flex items-center gap-2"
+            className={btnPrimary}
           >
             <FaCalendarCheck className="text-brand-200" /> Book an HRMS Demo
           </DemoButton>
-          <PricingButton className="px-8 py-4 border border-brand-800 text-brand-800 hover:bg-brand-50 font-bold rounded-xl transition-all inline-flex items-center gap-2">
+          <PricingButton className={btnSecondary}>
             <FaFileInvoice /> Get Custom Pricing
           </PricingButton>
         </div>

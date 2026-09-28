@@ -87,7 +87,7 @@ export function Testimonials() {
           <div className="mt-8 text-center">
             <Link
               href="/clients"
-              className="link-underline inline-flex items-center gap-2 py-1.5 text-sm font-bold text-brand-800"
+              className="link-underline tap gap-2 py-1.5 text-sm font-bold text-brand-800"
             >
               See clients &amp; partners <FaArrowRight className="text-xs" />
             </Link>

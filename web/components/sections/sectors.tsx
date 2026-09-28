@@ -27,7 +27,7 @@ export function Sectors() {
             <Link
               key={industry.slug}
               href={`/industries/${industry.slug}`}
-              className="group inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-5 py-2.5 text-xs font-bold text-slate-800 transition-colors hover:border-brand-400 hover:bg-white hover:text-brand-800"
+              className="group tap gap-2 rounded-full border border-slate-200 bg-slate-50 px-5 text-xs font-bold text-slate-800 transition-colors hover:border-brand-400 hover:bg-white hover:text-brand-800"
             >
               <Icon name={industry.icon} />
               {industry.name}
@@ -41,7 +41,7 @@ export function Sectors() {
         >
           <Link
             href="/industries"
-            className="link-underline inline-flex items-center gap-2 py-1.5 text-sm font-bold text-brand-800"
+            className="link-underline tap gap-2 py-1.5 text-sm font-bold text-brand-800"
           >
             See all industries <FaArrowRight className="text-xs" />
           </Link>

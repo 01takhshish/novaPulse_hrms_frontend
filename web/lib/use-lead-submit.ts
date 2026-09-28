@@ -87,5 +87,5 @@ export function useLeadSubmit(source: string) {
 }
 
 export const leadInputClass =
-  "w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl py-2.5 px-3.5 text-sm focus:outline-none focus:border-brand-700";
+  "w-full min-h-11 bg-slate-50 border border-slate-200 text-slate-800 rounded-xl py-2.5 px-3.5 text-sm focus:border-brand-700";
 export const leadErrorInputClass = "border-red-400 bg-red-50";

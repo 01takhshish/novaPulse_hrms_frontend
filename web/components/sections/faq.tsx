@@ -26,7 +26,7 @@ export function Faq() {
         <div data-reveal="up" className="mt-10 text-center">
           <p className="text-sm text-slate-600">
             Something not covered here?{" "}
-            <Link href="/contact" className="link-underline inline-block py-1.5 font-bold text-brand-800">
+            <Link href="/contact" className="link-underline tap py-1.5 font-bold text-brand-800">
               Ask us directly <FaArrowRight className="inline text-[10px]" />
             </Link>
           </p>

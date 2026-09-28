@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { btnPrimary } from "@/lib/ui/button";
 
 export default function Error({
   error,
@@ -34,7 +35,7 @@ export default function Error({
         <button
           type="button"
           onClick={reset}
-          className="px-7 py-3.5 rounded-xl bg-brand-800 hover:bg-brand-900 text-white font-bold text-sm transition-colors"
+          className={btnPrimary}
         >
           Try again
         </button>

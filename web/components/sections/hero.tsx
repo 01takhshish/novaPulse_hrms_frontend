@@ -2,6 +2,7 @@ import { FaBullseye, FaCalendarCheck, FaChartLine, FaCheck, FaFingerprint, FaShi
 import { Counter } from "@/components/motion/counter";
 import { DemoButton } from "@/components/demo-modal";
 import { site } from "@/lib/site";
+import { btnPrimary, btnSecondary } from "@/lib/ui/button";
 
 const heroProof = [
   "Live Cloud Integration",
@@ -48,7 +49,7 @@ export function Hero() {
               <DemoButton
                 service="General Inquiry"
                 source="hero"
-                className="px-8 py-4 rounded-xl bg-brand-800 hover:bg-brand-900 text-white font-bold text-base transition-all shadow-lg shadow-brand-900/20 hover:scale-102 w-full sm:w-auto inline-flex items-center justify-center gap-2"
+                className={`${btnPrimary} w-full sm:w-auto`}
               >
                 <FaCalendarCheck className="text-brand-200" /> Book a Free Demo
               </DemoButton>
@@ -56,7 +57,7 @@ export function Hero() {
                 href={site.whatsapp}
                 target="_blank"
                 rel="noopener"
-                className="px-8 py-4 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-bold text-base transition-all shadow-sm w-full sm:w-auto inline-flex items-center justify-center gap-2"
+                className={`${btnSecondary} w-full sm:w-auto`}
               >
                 <FaWhatsapp className="w-5 h-5 text-emerald-600" /> Talk to an Expert
               </a>

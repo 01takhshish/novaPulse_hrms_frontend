@@ -46,7 +46,7 @@ export function PageHero({
                 <span key={crumb.label}>
                   {i > 0 && <span className="mx-2 text-slate-300">/</span>}
                   {crumb.href ? (
-                    <Link href={crumb.href} className="inline-block py-1.5 hover:text-brand-800">
+                    <Link href={crumb.href} className="tap py-1.5 hover:text-brand-800">
                       {crumb.label}
                     </Link>
                   ) : (

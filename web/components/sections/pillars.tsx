@@ -1,5 +1,6 @@
 import { getServiceForReference } from "@/lib/services";
 import { FaArrowRight, FaCircleCheck, FaShieldHalved, FaChartLine, FaUserGroup } from "react-icons/fa6";
+import { btnSecondarySm } from "@/lib/ui/button";
 
 const pillars = [
   {
@@ -102,7 +103,7 @@ export async function Pillars() {
               </div>
               <a
                 href={links[i]}
-                className="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-white border border-slate-300 font-bold text-sm text-slate-900 hover:bg-brand-800 hover:text-white hover:border-brand-800 transition-all shadow-sm"
+                className={`${btnSecondarySm} w-full`}
               >
                 {pillar.cta} <FaArrowRight className="text-xs" />
               </a>

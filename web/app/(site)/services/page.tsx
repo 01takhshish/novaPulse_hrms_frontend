@@ -9,6 +9,7 @@ import { BlobBackdrop } from "@/components/motion/blob-backdrop";
 import { Reveal, RevealGroup } from "@/components/motion/reveal";
 import { getServices } from "@/lib/services";
 import { site } from "@/lib/site";
+import { btnPrimary } from "@/lib/ui/button";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -71,7 +72,7 @@ export default async function ServicesIndexPage() {
               <Reveal delay={240}>
                 <DemoButton
                   source="services-index-hero"
-                  className="mt-9 inline-flex items-center justify-center gap-2 rounded-xl bg-brand-800 px-8 py-4 text-base font-bold text-white shadow-lg shadow-brand-900/20 transition-all hover:scale-102 hover:bg-brand-900"
+                  className={`${btnPrimary} mt-9`}
                 >
                   <FaCalendarCheck className="text-brand-200" /> Book a free demo
                 </DemoButton>

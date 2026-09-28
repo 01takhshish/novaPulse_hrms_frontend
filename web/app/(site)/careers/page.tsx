@@ -6,6 +6,7 @@ import { Reveal, RevealGroup } from "@/components/motion/reveal";
 import { PageHero } from "@/components/page-hero";
 import { careerReasons, locations, openRoles } from "@/content/company";
 import { site } from "@/lib/site";
+import { btnPrimarySm } from "@/lib/ui/button";
 
 export const metadata: Metadata = {
   title: "Careers",
@@ -67,7 +68,7 @@ export default function CareersPage() {
                     </p>
                   </div>
                   <a href={`mailto:${site.email}?subject=Application: ${encodeURIComponent(role.title)}`}
-                    className="shrink-0 rounded-xl bg-brand-800 px-6 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-brand-900">
+                    className={`${btnPrimarySm} shrink-0`}>
                     Apply
                   </a>
                 </div>
@@ -111,7 +112,7 @@ export default function CareersPage() {
                 <p className="mt-4 text-xs text-slate-500">
                   Prefer email? Write to{" "}
                   <a href={`mailto:${site.email}`}
-                    className="link-underline inline-block py-1 font-semibold text-brand-800">
+                    className="link-underline tap py-1 font-semibold text-brand-800">
                     {site.email}
                   </a>
                   .

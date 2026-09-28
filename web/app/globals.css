@@ -20,33 +20,35 @@
   --color-brand-800: #6b21a8;
   --color-brand-900: #3b0764;
   --color-brand-950: #200338;
-
-  --animate-marquee: marquee 28s linear infinite;
-
-  @keyframes marquee {
-    0% {
-      transform: translateX(0%);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
 }
 
-.animate-marquee {
-  display: flex;
-  width: max-content;
+/* ---------------------------------------------------------------------------
+   Touch targets
+   The UI/UX audit asks for comfortable tap targets on mobile. 44px is Apple's
+   HIG minimum and WCAG 2.2's enhanced target size. Applied as min-height on an
+   inline-flex box so a dense link list (the footer) gains hit area without
+   gaining visual padding, and applied at every width — a 44px target is not
+   worse with a mouse.
+   --------------------------------------------------------------------------- */
+.tap {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
 }
 
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
+/* ---------------------------------------------------------------------------
+   Card radius scale
+   Two steps, chosen by how much padding a card carries, so cards of the same
+   size always share a radius:
+     p-6 and up  -> rounded-3xl   (section cards, feature cards, quotes)
+     p-3 to p-5  -> rounded-2xl   (stat tiles, list rows, small panels)
+   The one exception is artwork nested inside a card — the hero's mock dashboard
+   uses rounded-xl inside a rounded-3xl frame, because a nested radius has to be
+   tighter than the one containing it or the corners look wrong.
 
-@media (prefers-reduced-motion: reduce) {
-  .animate-marquee {
-    animation: none;
-  }
-}
+   Button shapes live in lib/ui/button.ts, not here: they need to be composed
+   with layout classes at the call site.
+   --------------------------------------------------------------------------- */
 
 /*
  * react-icons emits <svg stroke="currentColor" fill="currentColor" stroke-width="0">.
