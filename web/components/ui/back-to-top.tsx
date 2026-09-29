@@ -26,8 +26,10 @@ export function BackToTop() {
         })
       }
       aria-label="Back to top"
-      // Sits above the WhatsApp button rather than under it.
-      className={`fixed bottom-24 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-lg transition-all duration-300 hover:bg-slate-50 hover:text-brand-800 ${
+      // Stacked above the WhatsApp button rather than under it. The offset is
+      // measured from the same safe-area baseline the WhatsApp button uses, so
+      // the pair keeps its spacing on a notched phone instead of drifting apart.
+      className={`fixed bottom-[calc(6rem+env(safe-area-inset-bottom))] right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-lg transition-all duration-300 hover:bg-slate-50 hover:text-brand-800 ${
         visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0"
       }`}
     >
