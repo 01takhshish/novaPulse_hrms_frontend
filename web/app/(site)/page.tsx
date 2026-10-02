@@ -7,7 +7,6 @@ import { Hrms } from "@/components/sections/hrms";
 import { ServicesGrid } from "@/components/sections/services-grid";
 import { HowItWorks } from "@/components/sections/how-it-works";
 import { WhyUs } from "@/components/sections/why-us";
-import { Sectors } from "@/components/sections/sectors";
 import { Testimonials } from "@/components/sections/testimonials";
 import { Faq } from "@/components/sections/faq";
 import { FinalCta } from "@/components/sections/final-cta";
@@ -24,7 +23,7 @@ const faqSchema = {
 };
 
 /**
- * Twelve sections, in the order a buyer actually reads: what we do, proof that
+ * Eleven sections, in the order a buyer actually reads: what we do, proof that
  * we exist, what the company is, the positioning, the flagship product in
  * depth, the rest of the range as cards, how a rollout runs, why us, proof,
  * objections, ask.
@@ -47,7 +46,6 @@ export default function Home() {
       <ServicesGrid />
       <HowItWorks />
       <WhyUs />
-      <Sectors />
       <Testimonials />
       <Faq />
       <FinalCta />
