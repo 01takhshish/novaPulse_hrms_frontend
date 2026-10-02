@@ -8,10 +8,17 @@ import { useId, useState, type ReactNode } from "react";
  */
 export function Accordion({
   items,
+  defaultOpen = 0,
 }: {
   items: { question: string; answer: ReactNode }[];
+  /**
+   * Index open on first paint, or null for an all-closed list. Two accordions
+   * side by side would otherwise both open their first row, which reads as two
+   * unrelated lists rather than one split column.
+   */
+  defaultOpen?: number | null;
 }) {
-  const [open, setOpen] = useState<number | null>(0);
+  const [open, setOpen] = useState<number | null>(defaultOpen);
   const base = useId();
 
   return (

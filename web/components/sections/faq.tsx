@@ -3,25 +3,33 @@ import { FaArrowRight } from "react-icons/fa6";
 import { Accordion } from "@/components/ui/accordion";
 import { faqs } from "@/lib/faqs";
 
+/** Five questions per column, so the split stays even as the list grows. */
+const half = Math.ceil(faqs.length / 2);
+const leftColumn = faqs.slice(0, half);
+const rightColumn = faqs.slice(half);
+
 /**
- * Full-bleed FAQ: the heading column holds the page edge on the left while the
- * questions take the rest of the width.
+ * Centred heading over a two-column question list.
  *
- * It used to be a centred max-w-4xl stack, which left the section reading as a
- * narrow strip in the middle of an otherwise full-width page. Widening it alone
- * would have been worse — a single accordion row stretched to 1280px gives a
- * click target the width of the screen and an answer line far past a readable
- * measure. Splitting the heading out uses the width and keeps the answers at a
- * sane line length.
+ * A single full-width accordion was the wrong shape for this page: one row
+ * stretched to 1280px gives a click target the width of the screen and an
+ * answer line far past a readable measure. Two columns use the same width
+ * while keeping each row at a sane line length, and halve the vertical run so
+ * the section no longer pushes the final CTA a screen and a half down.
  *
- * `lg:sticky` keeps the heading and the contact prompt in view while a long
- * list of answers scrolls past it.
+ * The columns are independent accordions, so opening a row on the left does
+ * not shift the right-hand rows under the reader's cursor. Only the first
+ * left-hand row is open on arrival — see the `defaultOpen` note in Accordion.
+ *
+ * Below lg they stack into one list in reading order, 1 through 10. The row
+ * gap matches the spacing inside a column there, so the join between the two
+ * halves is invisible rather than reading as two separate lists.
  */
 export function Faq() {
   return (
     <section id="faq" className="border-b border-slate-200 bg-slate-50 py-24">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 lg:grid-cols-[minmax(0,20rem)_1fr] lg:gap-16">
-        <div data-reveal="up" className="lg:sticky lg:top-28 lg:self-start">
+      <div className="mx-auto max-w-7xl px-6">
+        <div data-reveal="up" className="mx-auto max-w-2xl text-center">
           <span className="text-xs font-bold uppercase tracking-widest text-brand-800">
             Knowledge Base
           </span>
@@ -31,18 +39,26 @@ export function Faq() {
           <p className="mt-3 text-sm leading-relaxed text-slate-600">
             Clear answers regarding HRMS integration, biometric hardware, and growth services.
           </p>
-
-          <p className="mt-6 text-sm text-slate-600">
-            Something not covered here?{" "}
-            <Link href="/contact" className="link-underline tap py-1.5 font-bold text-brand-800">
-              Ask us directly <FaArrowRight className="inline text-[10px]" />
-            </Link>
-          </p>
         </div>
 
-        <div data-reveal="up">
-          <Accordion items={faqs.map((f) => ({ question: f.question, answer: f.answer }))} />
+        <div className="mt-12 grid grid-cols-1 items-start gap-x-6 gap-y-3 lg:grid-cols-2 lg:gap-8">
+          <div data-reveal="up">
+            <Accordion items={leftColumn.map((f) => ({ question: f.question, answer: f.answer }))} />
+          </div>
+          <div data-reveal="up">
+            <Accordion
+              items={rightColumn.map((f) => ({ question: f.question, answer: f.answer }))}
+              defaultOpen={null}
+            />
+          </div>
         </div>
+
+        <p data-reveal="up" className="mt-12 text-center text-sm text-slate-600">
+          Something not covered here?{" "}
+          <Link href="/contact" className="link-underline tap py-1.5 font-bold text-brand-800">
+            Ask us directly <FaArrowRight className="inline text-[10px]" />
+          </Link>
+        </p>
       </div>
     </section>
   );
