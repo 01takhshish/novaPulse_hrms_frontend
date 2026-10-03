@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaArrowRight, FaQuoteLeft } from "react-icons/fa6";
+import { FaArrowRight, FaStar } from "react-icons/fa6";
 import { Icon } from "@/components/icon";
 import { clients, testimonials } from "@/content/clients";
 
@@ -17,56 +17,79 @@ function initials(name: string) {
 /**
  * Quotes come from content/clients.ts, which the /clients page also renders —
  * add a client's words there (with their sign-off) and both pages pick it up.
+ *
+ * Two layouts, picked by how many quotes exist. With one, the heading sits
+ * beside the card in a two-column split, because a lone card under a full-width
+ * heading reads as a section that failed to load. With two or more, the heading
+ * goes above a normal grid. Nothing to change when a quote is added — the
+ * section reflows itself.
  */
 export function Testimonials() {
   if (testimonials.length === 0) return null;
+  const solo = testimonials.length === 1;
 
   return (
-    <section id="testimonials" className="py-20 bg-slate-50 border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="mb-12 text-center">
-          <span className="text-xs font-bold tracking-widest text-brand-800 uppercase block mb-1">
-            In Their Words
-          </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900">
-            What Our Clients Say
-          </h2>
-        </div>
+    <section id="testimonials" className="border-b border-slate-200 bg-slate-50 py-20">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className={solo ? "grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16" : ""}>
+          <div
+            data-reveal={solo ? "left" : "up"}
+            className={solo ? "" : "mb-12 max-w-2xl"}
+          >
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-800">
+              In their words
+            </span>
+            <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
+              What our clients say
+            </h2>
+            <p className="mt-4 text-base leading-relaxed text-slate-600">
+              Nova Pulse runs the attendance, payroll, security and pipeline systems for
+              manufacturing, healthcare, retail and BPO businesses across Delhi NCR and Uttar
+              Pradesh. Here is what that looks like from their side of the deployment.
+            </p>
+          </div>
 
-        <div
-          className={
-            testimonials.length === 1
-              ? "max-w-3xl mx-auto"
-              : "grid gap-6 md:grid-cols-2 lg:grid-cols-3"
-          }
-        >
-          {testimonials.map((testimonial) => (
-            <figure
-              key={testimonial.name}
-              data-reveal="up"
-              className="relative flex flex-col rounded-3xl bg-white border border-slate-200 shadow-sm p-8 md:p-10"
-            >
-              <FaQuoteLeft className="text-2xl text-brand-200" aria-hidden="true" />
-              <blockquote className="mt-4 flex-1 text-base md:text-lg leading-relaxed text-slate-700">
-                &ldquo;{testimonial.quote}&rdquo;
-              </blockquote>
-              <figcaption className="mt-6 flex items-center gap-4 border-t border-slate-100 pt-5">
-                <span
-                  aria-hidden="true"
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-800 text-sm font-bold text-white"
-                >
-                  {initials(testimonial.name)}
-                </span>
-                <div>
-                  <div className="text-sm font-bold text-slate-900">{testimonial.name}</div>
-                  <div className="text-xs text-slate-500">{testimonial.role}</div>
-                  <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-widest text-brand-700">
-                    {testimonial.service}
+          <div className={solo ? "" : "grid gap-6 md:grid-cols-2 lg:grid-cols-3"}>
+            {testimonials.map((testimonial) => (
+              <figure
+                key={testimonial.name}
+                data-reveal={solo ? "right" : "up"}
+                className="flex flex-col rounded-3xl border border-slate-200 bg-white p-8 shadow-sm md:p-10"
+              >
+                {/* Client first, quote second — you decide whether a review is
+                    worth reading by who wrote it, so the attribution leads
+                    instead of being a footnote under the text. */}
+                <figcaption className="flex items-center gap-4">
+                  <span
+                    aria-hidden="true"
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-800 text-sm font-bold text-white"
+                  >
+                    {initials(testimonial.name)}
+                  </span>
+                  <div>
+                    <div className="text-sm font-bold text-slate-900">{testimonial.name}</div>
+                    <div className="text-xs text-slate-500">{testimonial.role}</div>
                   </div>
+                </figcaption>
+
+                {/* Same five stars the /clients page already publishes for these
+                    quotes, so the two pages can't show different ratings. */}
+                <div className="mt-5 flex items-center gap-1 text-sm text-amber-500">
+                  {Array.from({ length: 5 }).map((_, star) => (
+                    <FaStar key={star} aria-hidden="true" />
+                  ))}
+                  <span className="sr-only">Rated 5 out of 5</span>
+                  <span className="ml-2 text-[10px] font-semibold uppercase tracking-widest text-brand-700">
+                    {testimonial.service}
+                  </span>
                 </div>
-              </figcaption>
-            </figure>
-          ))}
+
+                <blockquote className="mt-5 flex-1 border-t border-slate-100 pt-5 text-base leading-relaxed text-slate-700 md:text-lg">
+                  &ldquo;{testimonial.quote}&rdquo;
+                </blockquote>
+              </figure>
+            ))}
+          </div>
         </div>
 
         <div data-reveal="up" className="mt-14 border-t border-slate-200 pt-10">
