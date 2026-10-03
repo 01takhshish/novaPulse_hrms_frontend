@@ -5,7 +5,7 @@ import { Icon } from "@/components/icon";
 import { LeadForm } from "@/components/lead-form";
 import { Reveal } from "@/components/motion/reveal";
 import { PageHero } from "@/components/page-hero";
-import { locations } from "@/content/company";
+import { locations, workingHours } from "@/content/company";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -119,14 +119,12 @@ export default function ContactPage() {
                     <Icon name="FaClock" className="text-brand-700" /> Working hours
                   </h2>
                   <dl className="mt-4 space-y-2 text-xs text-slate-600">
-                    <div className="flex justify-between gap-4">
-                      <dt>Monday – Saturday</dt>
-                      <dd className="font-semibold text-slate-900">10:00 – 19:00 IST</dd>
-                    </div>
-                    <div className="flex justify-between gap-4">
-                      <dt>Sunday</dt>
-                      <dd className="font-semibold text-slate-900">Closed</dd>
-                    </div>
+                    {workingHours.map((entry) => (
+                      <div key={entry.days} className="flex justify-between gap-4">
+                        <dt>{entry.days}</dt>
+                        <dd className="font-semibold text-slate-900">{entry.hours}</dd>
+                      </div>
+                    ))}
                   </dl>
                   <p className="mt-4 border-t border-slate-200 pt-3 text-[11px] leading-relaxed text-slate-500">
                     Existing customers with a support agreement can reach their account manager

@@ -48,6 +48,15 @@ export const locations = [
 ];
 
 /**
+ * Company-wide, not per office — both /contact and the site footer read this,
+ * so the two can never quote different hours.
+ */
+export const workingHours = [
+  { days: "Monday – Saturday", hours: "10:00 – 19:00 IST" },
+  { days: "Sunday", hours: "Closed" },
+];
+
+/**
  * Leadership. Left empty deliberately — the original site never named anyone,
  * and publishing a name or title we cannot verify would be inventing facts
  * about a real person. Add entries here and the section appears on /about.
