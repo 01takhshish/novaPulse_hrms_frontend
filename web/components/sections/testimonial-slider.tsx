@@ -22,7 +22,7 @@ function initials(name: string) {
 }
 
 /**
- * One quote at a time, advancing on its own.
+ * Two quotes a page on a desktop, one on a phone, advancing on their own.
  *
  * The track is a native scroll-snap container rather than a transform, so a
  * phone swipes it with the browser's own momentum and the arrows are only a
@@ -41,8 +41,29 @@ export function TestimonialSlider({ testimonials }: { testimonials: Testimonial[
   const [tabHidden, setTabHidden] = useState(false);
   const [reduced, setReduced] = useState(false);
 
-  const count = testimonials.length;
-  const sliding = count > 1;
+  /**
+   * Two cards share the view from `md` up, so the number of pages is not the
+   * number of quotes. Measure it off the track rather than guessing from a
+   * breakpoint, and remeasure on resize — otherwise a rotated phone leaves the
+   * dots offering pages that no longer exist.
+   */
+  const [pages, setPages] = useState(1);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const measure = () => {
+      const next = Math.max(1, Math.round(track.scrollWidth / track.clientWidth));
+      setPages(next);
+      setIndex((current) => Math.min(current, next - 1));
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, [testimonials.length]);
+
+  const sliding = pages > 1;
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -74,9 +95,9 @@ export function TestimonialSlider({ testimonials }: { testimonials: Testimonial[
      firing on a fixed drum beat the reader cannot influence. */
   useEffect(() => {
     if (!sliding || interacting || tabHidden || reduced) return;
-    const timer = setTimeout(() => goTo((index + 1) % count), 6000);
+    const timer = setTimeout(() => goTo((index + 1) % pages), 6000);
     return () => clearTimeout(timer);
-  }, [index, count, sliding, interacting, tabHidden, reduced, goTo]);
+  }, [index, pages, sliding, interacting, tabHidden, reduced, goTo]);
 
   /* The scroll position is the source of truth, not the button that caused it —
      a swipe and an arrow press both land here, so the dots can never disagree
@@ -88,7 +109,19 @@ export function TestimonialSlider({ testimonials }: { testimonials: Testimonial[
   };
 
   return (
+    /* `relative` and the clip are load-bearing together, and the reason is not
+       the cards — the track already clips those. It is the `sr-only` span on
+       each card: Tailwind makes that `position: absolute`, so without a
+       positioned ancestor here its containing block was somewhere up near the
+       body, and an absolutely-positioned box is not clipped by an unpositioned
+       ancestor's overflow. The spans for the off-screen cards therefore escaped
+       the track and dragged the whole document's scrollable width out to the
+       right, letting the page scroll sideways. `relative` pulls their
+       containing block back to this element and the clip then contains them.
+       `clip` rather than `hidden` so the vertical reveal transform still moves
+       freely, and the margin leaves the cards' shadows room to render. */
     <div
+      className="relative overflow-x-clip [overflow-clip-margin:12px]"
       onMouseEnter={() => setInteracting(true)}
       onMouseLeave={() => setInteracting(false)}
       onFocusCapture={() => setInteracting(true)}
@@ -105,7 +138,7 @@ export function TestimonialSlider({ testimonials }: { testimonials: Testimonial[
         {testimonials.map((testimonial) => (
           <figure
             key={testimonial.name}
-            className="w-full shrink-0 snap-center px-1"
+            className="w-full shrink-0 snap-start px-1 md:w-1/2 md:px-3"
             {...(sliding ? { "aria-roledescription": "slide" } : {})}
           >
             <div className="flex h-full flex-col rounded-3xl border border-slate-200 bg-white p-8 shadow-sm md:p-10">
@@ -149,7 +182,7 @@ export function TestimonialSlider({ testimonials }: { testimonials: Testimonial[
         <div className="mt-8 flex items-center justify-center gap-4">
           <button
             type="button"
-            onClick={() => goTo((index - 1 + count) % count)}
+            onClick={() => goTo((index - 1 + pages) % pages)}
             aria-label="Previous testimonial"
             className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 transition-colors hover:border-brand-700 hover:text-brand-800"
           >
@@ -157,12 +190,12 @@ export function TestimonialSlider({ testimonials }: { testimonials: Testimonial[
           </button>
 
           <div className="flex items-center gap-2">
-            {testimonials.map((testimonial, dot) => (
+            {Array.from({ length: pages }).map((_, dot) => (
               <button
-                key={testimonial.name}
+                key={dot}
                 type="button"
                 onClick={() => goTo(dot)}
-                aria-label={`Go to testimonial ${dot + 1} of ${count}`}
+                aria-label={`Go to slide ${dot + 1} of ${pages}`}
                 aria-current={dot === index}
                 className={`h-2 rounded-full transition-all ${
                   dot === index ? "w-6 bg-brand-800" : "w-2 bg-slate-300 hover:bg-slate-400"
@@ -173,7 +206,7 @@ export function TestimonialSlider({ testimonials }: { testimonials: Testimonial[
 
           <button
             type="button"
-            onClick={() => goTo((index + 1) % count)}
+            onClick={() => goTo((index + 1) % pages)}
             aria-label="Next testimonial"
             className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 transition-colors hover:border-brand-700 hover:text-brand-800"
           >

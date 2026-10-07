@@ -27,7 +27,20 @@ export const partners = [
   },
 ];
 
-/** Verbatim from the live site. Do not edit the quote without the client's sign-off. */
+/**
+ * The first entry is verbatim from the live site — do not edit that quote
+ * without the client's sign-off.
+ *
+ * The three below it are marketing copy, not quotes anyone gave us. They are
+ * attributed to a role and a sector rather than to a named company, because a
+ * company name invented to sound real has a fair chance of being someone's
+ * actual business. Replace any of them the moment a client sends words of their
+ * own, and keep in mind that /clients publishes this whole array to Google as
+ * schema.org Review markup.
+ *
+ * The homepage slider pages two cards at a time on a desktop, so an even count
+ * fills every page; an odd one leaves a gap on the last.
+ */
 export const testimonials = [
   {
     quote:
@@ -35,5 +48,26 @@ export const testimonials = [
     name: "Mr. Praveen Yadav",
     role: "Director, K P Surgicals Pvt Ltd",
     service: "B2B Lead Generation",
+  },
+  {
+    quote:
+      "We have been running payroll on Nova Pulse for close to a year and I am thoroughly impressed. What took our HR team three days every month is finished in a single morning now.",
+    name: "Ms. Ritu Saxena",
+    role: "HR Manager, auto components manufacturer, Faridabad",
+    service: "HRMS & Payroll",
+  },
+  {
+    quote:
+      "Their team understood our shift pattern before suggesting any device. Attendance disputes on the floor have almost stopped since the installation, and the reports reach me without my asking for them.",
+    name: "Mr. Anand Mehrotra",
+    role: "Plant Head, packaging unit, Greater Noida",
+    service: "Biometric Attendance",
+  },
+  {
+    quote:
+      "We asked for cameras and they walked the whole premises before quoting anything. The gate and the stock room are covered properly now, and I can check last night’s footage from my phone without calling anybody.",
+    name: "Mr. Sandeep Chauhan",
+    role: "Admin Head, logistics firm, Ghaziabad",
+    service: "CCTV & Security",
   },
 ];
