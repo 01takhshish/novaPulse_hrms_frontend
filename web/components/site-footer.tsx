@@ -67,7 +67,7 @@ export async function SiteFooter() {
         <div className="grid grid-cols-1 gap-8 border-b border-slate-800 pb-12 sm:grid-cols-2 lg:grid-cols-4">
           {locations.map((location) => (
             <div key={location.city}>
-              <h2 className="text-sm font-bold text-white">{location.city}</h2>
+              <h2 className="text-sm font-extrabold text-white">{location.city}</h2>
               <p className="mt-3 flex items-start gap-2 leading-relaxed">
                 <FaLocationDot className="mt-0.5 shrink-0 text-brand-400" />
                 <span>{location.address}</span>
@@ -77,7 +77,7 @@ export async function SiteFooter() {
           ))}
 
           <div>
-            <h2 className="text-sm font-bold text-white">Talk to us</h2>
+            <h2 className="text-sm font-extrabold text-white">Talk to us</h2>
             <ul className="mt-3 space-y-0.5">
               <li className="flex items-center gap-2">
                 <FaPhone className="shrink-0 text-brand-400" />
@@ -109,7 +109,7 @@ export async function SiteFooter() {
           </div>
 
           <div>
-            <h2 className="flex items-center gap-2 text-sm font-bold text-white">
+            <h2 className="flex items-center gap-2 text-sm font-extrabold text-white">
               <FaClock className="shrink-0 text-brand-400" /> Working hours
             </h2>
             <dl className="mt-3 space-y-2">
@@ -154,7 +154,7 @@ export async function SiteFooter() {
           </div>
 
           <div>
-            <h2 className="mb-4 text-sm font-bold text-white">Solutions</h2>
+            <h2 className="mb-4 text-sm font-extrabold text-white">Solutions</h2>
             <ul className="space-y-1">
               {solutionLinks.map((link) => (
                 <li key={link.href}>
@@ -170,7 +170,7 @@ export async function SiteFooter() {
           </div>
 
           <div>
-            <h2 className="mb-4 text-sm font-bold text-white">Industries</h2>
+            <h2 className="mb-4 text-sm font-extrabold text-white">Industries</h2>
             <ul className="space-y-1">
               {industryLinks.map((link) => (
                 <li key={link.href}>
@@ -186,7 +186,7 @@ export async function SiteFooter() {
           </div>
 
           <div>
-            <h2 className="mb-4 text-sm font-bold text-white">Company</h2>
+            <h2 className="mb-4 text-sm font-extrabold text-white">Company</h2>
             <ul className="space-y-1">
               {companyLinks.map((link) => (
                 <li key={link.href}>
